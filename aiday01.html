@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DAY 1 | 우리 팀 AI 업무분류표 만들기</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --bg:#f6f6f9; --card:#fff; --ink:#1c1b22; --dim:#5d5b68;
+    --line:#e4e3ea; --code:#f3f2f7;
+    --accent:#3b3577; --accent2:#6e5fb0; --red:#c8323f; --teal:#23807f;
+    --grad:linear-gradient(90deg,#da3c48 0%,#d8539a 32%,#8a7cc0 64%,#7b9ecf 82%,#5ab8b7 100%);
+    --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","맑은 고딕",sans-serif;
+    --mono:"D2Coding",Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.72;font-size:16px;letter-spacing:-0.011em;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
+
+  .topline{height:6px;background:var(--grad)}
+  header{background:var(--accent);color:#fff;padding:22px 20px}
+  header h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-0.02em}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:10px 0;z-index:10}
+  nav>.wrap{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  nav>.urlbar{max-width:900px;margin:0 auto 9px;padding:0 20px 9px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:1px dashed var(--line)}
+  .urlbar .label{font-size:12px;font-weight:700;color:#fff;background:var(--accent);padding:3px 9px;border-radius:4px;align-self:center}
+  .urlbar .addr{font-size:19px;font-weight:700;color:var(--red)}
+  nav .day{font-size:12.5px;font-weight:700;color:var(--dim);margin:0 2px 0 8px}
+  nav a{display:inline-block;padding:6px 12px;border-radius:20px;font-size:13.5px;color:var(--accent);text-decoration:none;background:var(--code)}
+  nav a:hover{background:#e7e4f3}
+  nav a.on{background:var(--accent);color:#fff;font-weight:700}
+
+  .page{display:none;padding-bottom:30px}
+  .page.on{display:block}
+  section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px;margin:18px 0}
+  h2{font-size:20px;margin:0 0 4px;color:var(--accent);font-weight:700;letter-spacing:-0.02em}
+  .sub{color:var(--dim);font-size:14px;margin:0 0 14px}
+  h3{font-size:16px;margin:20px 0 6px;font-weight:700}
+  h3 small{font-weight:400;color:var(--dim);font-size:13px}
+  .badge{display:inline-block;color:#fff;font-size:12.5px;padding:2px 9px;border-radius:4px;margin-right:7px;vertical-align:2px;background:var(--accent2)}
+
+  .box{position:relative;background:var(--code);border:1px solid var(--line);border-radius:8px;padding:14px;margin:10px 0}
+  pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:13.5px;line-height:1.62;letter-spacing:0}
+  .copy{position:absolute;top:8px;right:8px;border:1px solid var(--line);background:#fff;color:var(--accent);border-radius:6px;padding:4px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .copy:hover{background:var(--accent);color:#fff}
+  .copy.done{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+  .wait{border:1.5px dashed var(--accent2);background:#fbfaff;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:14.5px}
+  .note{border-left:3px solid var(--accent2);background:#f3f1fa;padding:10px 14px;margin:12px 0;font-size:14.5px;border-radius:0 6px 6px 0}
+  .warn{border-left:3px solid var(--red);background:#fdf0f1;padding:10px 14px;margin:12px 0;font-size:14.5px;border-radius:0 6px 6px 0}
+
+  .steps{counter-reset:step;display:grid;gap:8px;margin:12px 0}
+  .steps div{position:relative;padding:10px 12px 10px 42px;background:#fbfbfd;border:1px solid var(--line);border-radius:8px;font-size:15px}
+  .steps div:before{counter-increment:step;content:counter(step);position:absolute;left:12px;top:12px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font-size:11px;font-weight:700}
+
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+  .cardbox{border:1px solid var(--line);border-radius:9px;padding:14px;background:#fbfbfd;font-size:14.5px}
+  .cardbox b{display:block;color:var(--accent);font-size:15px;margin-bottom:4px}
+  @media(max-width:650px){.grid{grid-template-columns:1fr}}
+
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+  th{background:var(--code);font-weight:700}
+  @media(max-width:650px){table{display:block;overflow-x:auto;white-space:nowrap}}
+
+  .write{width:100%;min-height:84px;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff;color:var(--ink)}
+  .ask{font-size:16.5px;font-weight:700;color:var(--accent);margin:14px 0 6px}
+
+  .pager{display:flex;justify-content:space-between;gap:10px;margin-top:8px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:6px;padding:9px 16px;font:inherit;font-size:14.5px;cursor:pointer;text-decoration:none}
+  .btn:hover{background:var(--accent2)}
+  .btn.ghost{background:#fff;color:var(--accent);border:1.5px solid var(--accent)}
+
+  footer{color:var(--dim);font-size:13px;text-align:center;padding:24px 20px}
+  @media print{nav{display:none}body{background:#fff}.copy,.pager{display:none}.page{display:block}}
+
+  .field{margin:16px 0}
+  .flabel{font-weight:700;font-size:16px;margin:0 0 6px;color:var(--ink)}
+  .flabel small{font-weight:400;color:var(--dim);font-size:13.5px;margin-left:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 13px;font-size:15px;cursor:pointer;user-select:none;line-height:1.4;text-align:left;font-family:inherit;color:var(--ink)}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{border-color:var(--accent);background:#efecf8;color:var(--accent);font-weight:700}
+  .chip .d{display:block;font-weight:400;color:var(--dim);font-size:13px;margin-top:3px}
+  .chip.wide{flex:1 1 100%}
+  .line{width:100%;font:inherit;font-size:15.5px;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff}
+  .line:focus,.edit:focus{outline:none;border-color:var(--accent2)}
+  .preview{background:#fff;border:1.5px solid var(--accent2);border-radius:10px;padding:16px;margin:12px 0;position:relative}
+  .preview pre{font-family:var(--sans);font-size:15px;line-height:1.75}
+  .preview mark{background:#efecf8;color:var(--accent);font-weight:700;border-radius:3px;padding:0 2px}
+  .preview mark.mine{background:#fde8ea;color:var(--red)}
+  .ptitle{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  .bigcopy{display:block;width:100%;margin-top:12px;background:var(--red);color:#fff;border:0;border-radius:8px;padding:13px;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+  .bigcopy:hover{filter:brightness(1.08)}
+  .bigcopy.done{background:var(--teal)}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .mini{border:1px solid var(--line);background:#fff;color:var(--accent);border-radius:6px;padding:5px 11px;font:inherit;font-size:13.5px;cursor:pointer}
+  .edit{width:100%;min-height:180px;font:inherit;font-size:15px;line-height:1.7;border:1.5px solid var(--red);border-radius:8px;padding:12px;background:#fffafa;margin-top:8px}
+  .diff{font-size:14px;background:#fdf0f1;border-radius:8px;padding:10px 12px;margin-top:8px}
+  .diff del{color:#999}
+  .diff ins{text-decoration:none;background:#fde0e3;color:var(--red);font-weight:700}
+  .legend{font-size:13px;color:var(--dim);margin-top:6px}
+  .legend mark{background:#efecf8;color:var(--accent);font-weight:700;padding:0 3px;border-radius:3px}
+  .legend mark.mine{background:#fde8ea;color:var(--red)}
+  .agenda{border:1px solid var(--line);border-radius:9px;background:#fbfbfd;padding:12px 14px;margin-top:8px;font-size:14.5px}
+  .agenda b{color:var(--accent)}
+  .sortcard{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin:8px 0;background:#fff;font-size:15.5px;flex-wrap:wrap}
+  .sortcard .opts{display:flex;gap:6px}
+  .sortcard .res{font-size:13.5px;font-weight:700;width:100%}
+  .sortcard .res.ok{color:var(--teal)} .sortcard .res.no{color:var(--red)}
+  .rec{border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin:10px 0;background:#fff}
+  .rec h4{margin:0 0 6px;color:var(--accent);font-size:15.5px}
+  .rec .k{color:var(--dim);font-size:13.5px}
+  .rec pre{background:var(--code);border-radius:6px;padding:10px;font-family:var(--sans);font-size:14px;margin-top:6px}
+  .empty{color:var(--dim);font-size:14.5px}
+  @media print{header,footer,nav{display:none}.page{display:none!important}.page.on{display:block!important}.tools,.bigcopy,.pager{display:none!important}}
+
+  body{word-break:keep-all;overflow-wrap:break-word}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:12px 0}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px}
+  .stat .n{font-size:30px;font-weight:800;color:var(--accent);letter-spacing:-.5px}
+  .stat .l{font-size:14px;color:var(--dim);margin-top:4px;line-height:1.5}
+  .src{font-size:12.5px;color:var(--dim);margin:6px 0 18px}
+  .flow5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+  .flow5 div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;line-height:1.5}
+  .flow5 div b{display:block;color:var(--accent);font-size:15.5px;margin-bottom:4px}
+  .flow5 div small{display:block;color:var(--dim);font-size:13px;margin-top:4px}
+  .flow5 div.today{border:2px solid var(--red)}
+  .flow5 div.today b{color:var(--red)}
+  @media(max-width:720px){.flow5{grid-template-columns:1fr 1fr}}
+  table.t{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px;margin:10px 0}
+  table.t th,table.t td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  table.t th{background:#f3f2f7;font-weight:700}
+  .cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+  .case{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+  .case b{color:var(--accent)} .case .k{display:block;color:var(--red);font-weight:800;font-size:17px;margin-top:4px}
+  .case.alt{border:2px dashed var(--accent2)}
+  .big{font-size:19px;font-weight:800;color:var(--accent);line-height:1.5;margin:14px 0}
+  .tnote{background:#fff8e6;border:1.5px solid #e9b949;border-radius:10px;padding:10px 13px;margin:12px 0;font-size:14px;line-height:1.65}
+  .tnote>b:first-child{display:inline-block;background:#e9b949;color:#fff;border-radius:5px;padding:1px 7px;margin-right:6px;font-size:12.5px}
+  .split{display:flex;gap:6px;margin:10px 0;max-width:520px}
+  .split div{flex:1;border:2px solid var(--accent2);border-radius:8px;height:92px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13.5px;background:#fff}
+  .split div:last-child{border-color:var(--teal)}
+  .paste{width:100%;min-height:110px;font:inherit;font-size:14px;border:1.5px dashed var(--accent2);border-radius:8px;padding:10px;background:#fbfaff}
+  .subfield{margin-left:18px;padding-left:14px;border-left:3px solid var(--line)}
+  .exrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:7px;font-size:13px}.exrow span{color:var(--dim);font-weight:700;margin-right:2px}
+  .exchip{border:1px dashed var(--line);background:#fafafa;border-radius:8px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink)}.exchip:hover{border-color:var(--accent2,#6e5fb0)}
+  .pastebox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0}
+  .pastebox h4{margin:0 0 6px;font-size:15.5px;color:var(--accent)}
+  .ok{color:var(--teal);font-weight:700;font-size:14px}
+  table.ws{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px;margin:10px 0}
+  table.ws th,table.ws td{border:1px solid var(--line);padding:6px 7px;text-align:center}
+  table.ws td.tn{text-align:left;font-weight:600}
+  table.ws th{background:#f3f2f7;font-size:13px}
+  .mk{border:1.5px solid var(--line);background:#fff;border-radius:50%;width:30px;height:30px;font:inherit;font-size:14px;cursor:pointer;margin:1px;color:var(--ink)}
+  .mk.on{border:2.5px solid var(--red);color:var(--red);font-weight:800;background:#fff5f6}
+  .mk.ai{border-color:var(--accent2);background:#efecf8;color:var(--accent);font-weight:800}
+  td.dim{color:#bbb}
+  .circ{display:inline-block;border:2px solid var(--red);border-radius:50%;padding:0 6px;color:var(--red);font-weight:800}
+  .hint{background:#f1f8f7;border:1px solid #bfdedd;border-radius:10px;padding:10px 13px;font-size:14.5px;margin:12px 0;line-height:1.6}
+  .hint b{color:var(--teal)}
+  .gptfinal{white-space:pre-wrap;background:var(--code);border-radius:8px;padding:10px;font-size:14px}
+  /* 강사 패널 */
+  #pbtn{position:fixed;right:14px;bottom:14px;z-index:50;background:var(--accent);color:#fff;border:0;border-radius:24px;padding:12px 18px;font:inherit;font-weight:700;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer}
+  #panel{position:fixed;top:0;right:0;height:100vh;width:min(440px,94vw);background:#fff;z-index:60;box-shadow:-6px 0 24px rgba(0,0,0,.18);transform:translateX(105%);transition:transform .2s;overflow:auto;padding:16px 16px 40px}
+  #panel.on{transform:none}
+  #panel h3{margin:4px 0 8px;color:var(--accent)}
+  #panel .x{float:right;border:0;background:none;font-size:22px;cursor:pointer}
+  .ptab{display:flex;gap:6px;margin:8px 0}
+  .ptab button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px;font:inherit;font-weight:700;cursor:pointer}
+  .ptab button.on{border-color:var(--accent);background:#efecf8;color:var(--accent)}
+  .bars{display:flex;gap:6px;margin:8px 0}
+  .bars div{flex:1;border-radius:8px;padding:8px;text-align:center;font-size:13px;background:#f3f2f7}
+  .bars div b{display:block;font-size:22px}
+  .reco{border:2px solid var(--red);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:14.5px;line-height:1.6}
+  .say{background:#fff8e6;border-radius:8px;padding:9px 11px;font-size:14.5px;margin:8px 0}
+  @media print{#pbtn,#panel,.tnote,.paste,.pastebox textarea{display:none!important}}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+<header><div class="wrap"><h1>DAY 1 | 우리 팀 AI 업무분류표 만들기</h1></div></header>
+<nav>
+<div class="urlbar"><span class="label">실습 페이지</span><span class="addr">bit.ly/aiday01</span></div>
+<div class="wrap" id="menu"><a href="#start">시작</a><a href="#p1">1 분류 맡기기</a><a href="#p2">2 고치기</a><a href="#p3">3 입력 점검</a><a href="#p4">4 팀 기준</a><a href="#sheet">활동지</a><a href="#record">내 기록</a></div>
+</nav>
+<div class="wrap">
+<div class="page" id="start"><section><h2>오늘 할 일</h2>
+<p class="sub">판단에서 실행까지, 직책자의 AI 5일 | 첫째 날</p>
+<div class="big">AI가 초안을 만들고, 직책자가 검토하고 판단하고, 팀이 실행합니다.</div>
+<h3>5일 동안 만드는 것</h3>
+<div class="flow5"><div class="today"><b>1일차 (오늘)</b>AI 관점<small>우리 팀 AI 업무분류표</small></div><div><b>2일차</b>의사결정<small>AI 의사결정 1PAGE</small></div><div><b>3일차</b>대시보드 ①</div><div><b>4일차</b>대시보드 ②</div><div><b>5일차</b>코칭.피드백<small>30일 Action Plan</small></div></div>
+<div class="grid">
+<div class="cardbox"><b>도구</b>기관이 준 <b>ChatGPT Edu</b> 계정 (개인 계정 아님)</div>
+<div class="cardbox"><b>오늘의 결과물</b>우리 팀 AI 업무분류표 (이 페이지의 [활동지]에서 표시하고 인쇄)</div>
+</div>
+<h3>타자는 거의 치지 않습니다</h3>
+<div class="steps"><div>이 페이지에서 <b>고르고</b> [프롬프트 복사]를 누릅니다</div><div>ChatGPT 입력창에 <b>Ctrl + V</b> 그리고 <b>Enter</b></div><div>답변 아래 <b>복사</b> 아이콘을 누르고 이 페이지 <b>결과 붙여넣기</b> 칸에 붙여넣습니다</div></div>
+<h3>화면을 반으로 나누면 편합니다</h3>
+<div class="split"><div>이 실습 페이지<br><b>Windows 키 + ←</b></div><div>ChatGPT<br><b>Windows 키 + →</b></div></div>
+<p class="sub">창을 클릭한 뒤 Windows 키를 누른 채 화살표를 누르면 화면 절반에 붙습니다.</p>
+
+<div class="note">이 페이지에서 고르거나 직접 쓴 내용은 <b>최종 프롬프트에 바로 들어가고</b> 맨 오른쪽 <b>[내 기록]</b>에 남습니다.</div>
+<div class="warn">이름, 연락처, 고객정보, 미공개 실적은 넣지 않습니다. 업무 이름만 쓰면 충분합니다.</div>
+<div class="pager"><span></span><a class="btn" href="#p1">실습 1 →</a></div></section></div><div class="page" id="p1"><section><h2><span class="badge">1</span>AI에게 먼저 분류 맡기기</h2><p class="sub">ChatGPT 새 채팅에서 합니다</p><div class="steps"><div>우리 팀을 고르고 내 업무와 비슷한 카드를 3~6개 누릅니다</div><div>카드에 없는 업무나 팀 사정은 필요할 때만 한 줄로 씁니다</div><div>[프롬프트 복사]를 누르고 ChatGPT 새 채팅에 붙여넣습니다</div></div><div id="fields-p1"></div>
+  <div class="preview" id="pv-p1">
+    <div class="ptitle">최종 프롬프트 미리보기 (고르거나 쓴 내용이 바로 들어갑니다)</div>
+    <pre></pre>
+    <div class="legend"><mark>보라색</mark> 내가 고른 것 &nbsp; <mark class="mine">빨간색</mark> 내가 직접 쓴 것</div>
+    <div class="tools"><button class="mini do-edit" type="button">✏️ 프롬프트 직접 고치기 (선택)</button><button class="mini do-reset" type="button">고친 내용 되돌리기</button></div>
+    <textarea class="edit" style="display:none"></textarea>
+    <div class="diff" style="display:none"></div>
+    <button class="bigcopy" type="button">📋 프롬프트 복사</button>
+  </div><div class="wait">⏳ <b>기다리는 동안</b> 아래 표의 <b>내 생각</b> 칸에서 업무마다 ①②③ 중 하나를 먼저 눌러 보세요. AI 답과 비교합니다.</div>
+<div id="ws-p1"></div><div class="pastebox"><h4>📥 AI 결과 붙여넣기</h4><p class="sub" style="margin:0 0 6px">붙여넣으면 'AI 분류' 칸이 자동으로 채워집니다.</p>
+<textarea class="paste" id="paste-p1" placeholder="ChatGPT 답변 아래 복사 아이콘을 누른 뒤 여기에 Ctrl + V"></textarea>
+<div id="pastemsg-p1"></div></div><div class="pager"><a class="btn ghost" href="#start">← 시작</a><a class="btn" href="#p2">실습 2 고치기 →</a></div></section></div><div class="page" id="p2"><section><h2><span class="badge">2</span>동의하지 않는 것 하나 고치기</h2><p class="sub">같은 채팅에서 이어서 합니다</p><div class="steps"><div>AI 표에서 '이건 다르다' 싶은 업무 <b>딱 1개</b>를 고릅니다</div><div>옮길 분류와 이유를 고릅니다 (내 말로 쓰면 그대로 들어갑니다)</div><div>복사해서 <b>같은 채팅</b>에 붙여넣습니다</div></div><div id="hint-p2"></div><div id="fields-p2"></div>
+  <div class="preview" id="pv-p2">
+    <div class="ptitle">최종 프롬프트 미리보기 (고르거나 쓴 내용이 바로 들어갑니다)</div>
+    <pre></pre>
+    <div class="legend"><mark>보라색</mark> 내가 고른 것 &nbsp; <mark class="mine">빨간색</mark> 내가 직접 쓴 것</div>
+    <div class="tools"><button class="mini do-edit" type="button">✏️ 프롬프트 직접 고치기 (선택)</button><button class="mini do-reset" type="button">고친 내용 되돌리기</button></div>
+    <textarea class="edit" style="display:none"></textarea>
+    <div class="diff" style="display:none"></div>
+    <button class="bigcopy" type="button">📋 프롬프트 복사</button>
+  </div><div class="note">아래 표 <b>내 최종 분류</b> 칸에 내 판단을 누릅니다. 고친 업무에는 자동으로 동그라미가 쳐집니다.</div><div id="ws-p2"></div><div class="pager"><a class="btn ghost" href="#p1">← 실습 1 분류 맡기기</a><a class="btn" href="#p3">실습 3 입력 점검 →</a></div></section></div><div class="page" id="p3"><section><h2><span class="badge">3</span>입력 점검: 넣을 것과 뺄 것</h2><p class="sub">같은 채팅에서 이어서 합니다</p><div class="steps"><div>우리 팀에서 조심할 자료를 고릅니다</div><div>복사해서 같은 채팅에 붙여넣습니다</div><div>결과를 아래에 붙여넣으면 '빼고도 할 수 있는지'가 표에 표시됩니다</div></div><div id="fields-p3"></div>
+  <div class="preview" id="pv-p3">
+    <div class="ptitle">최종 프롬프트 미리보기 (고르거나 쓴 내용이 바로 들어갑니다)</div>
+    <pre></pre>
+    <div class="legend"><mark>보라색</mark> 내가 고른 것 &nbsp; <mark class="mine">빨간색</mark> 내가 직접 쓴 것</div>
+    <div class="tools"><button class="mini do-edit" type="button">✏️ 프롬프트 직접 고치기 (선택)</button><button class="mini do-reset" type="button">고친 내용 되돌리기</button></div>
+    <textarea class="edit" style="display:none"></textarea>
+    <div class="diff" style="display:none"></div>
+    <button class="bigcopy" type="button">📋 프롬프트 복사</button>
+  </div><div class="pastebox"><h4>📥 AI 결과 붙여넣기</h4><p class="sub" style="margin:0 0 6px">붙여넣으면 '입력 점검' 칸이 ✓ △ ✗ 로 표시됩니다. 동의하지 않으면 직접 눌러 바꿉니다.</p>
+<textarea class="paste" id="paste-p3" placeholder="ChatGPT 답변 아래 복사 아이콘을 누른 뒤 여기에 Ctrl + V"></textarea>
+<div id="pastemsg-p3"></div></div><div id="ws-p3"></div>
+<div class="note">이 단계의 결론은 '다 조심하자'가 아니라 <b>'이것만 빼면 쓸 수 있다'</b>입니다.</div>
+<div class="warn">기관 계정이어도 학습에 안 쓰일 뿐 답이 맞는다는 뜻은 아닙니다. 개인 계정은 기관 워크스페이스의 관리와 보호 정책 대상이 아닙니다.</div><div class="pager"><a class="btn ghost" href="#p2">← 실습 2 고치기</a><a class="btn" href="#p4">실습 4 팀 기준 →</a></div></section></div><div class="page" id="p4"><section><h2><span class="badge">4</span>팀원에게 전할 우리 팀 AI 사용 기준</h2><p class="sub">같은 채팅에서 이어서 합니다</p><div class="steps"><div>활동지의 <b>내 최종 분류</b>가 프롬프트에 그대로 들어갑니다 (AI 분류와 다르면 내 판단을 따릅니다)</div><div>전할 형식과 꼭 넣을 원칙을 고릅니다</div><div>복사해서 <b>같은 채팅</b>에 붙여넣고 결과를 아래에 붙여넣습니다</div></div><div id="fields-p4"></div>
+  <div class="preview" id="pv-p4">
+    <div class="ptitle">최종 프롬프트 미리보기 (고르거나 쓴 내용이 바로 들어갑니다)</div>
+    <pre></pre>
+    <div class="legend"><mark>보라색</mark> 내가 고른 것 &nbsp; <mark class="mine">빨간색</mark> 내가 직접 쓴 것</div>
+    <div class="tools"><button class="mini do-edit" type="button">✏️ 프롬프트 직접 고치기 (선택)</button><button class="mini do-reset" type="button">고친 내용 되돌리기</button></div>
+    <textarea class="edit" style="display:none"></textarea>
+    <div class="diff" style="display:none"></div>
+    <button class="bigcopy" type="button">📋 프롬프트 복사</button>
+  </div><div class="pastebox"><h4>📥 AI가 만든 우리 팀 AI 사용 기준 붙여넣기</h4><p class="sub" style="margin:0 0 6px">붙여넣으면 [내 기록]에 분류표와 함께 남습니다.</p>
+<textarea class="paste" id="paste-p4" placeholder="ChatGPT 답변 아래 복사 아이콘을 누른 뒤 여기에 Ctrl + V"></textarea>
+<div id="pastemsg-p4"></div></div><div class="note">AI가 만든 기준도 초안입니다. 팀원에게 보내기 전에 <b>내가</b> 읽고 고칩니다. 이 기준은 DAY 5 Action Plan에서 다시 씁니다.</div>
+<h3>⭐ 워드 파일로 저장하기 <small>고쳤든 안 고쳤든 저장할 수 있습니다</small></h3>
+<div class="box"><button class="copy" type="button">복사</button><pre>위 '우리 팀 AI 사용 기준'을 워드 파일(.docx)로 내려받을 수 있게 바로 만들어줘.
+- 문서 창에서 내가 고친 부분이 있으면 고친 그대로, 고치지 않았으면 지금 내용 그대로 쓴다
+- 다시 묻지 말고 바로 파일을 만든다
+- 내용은 바꾸지 않는다
+- A4 한두 장, 팀원에게 나눠 줄 수 있는 문서 모양으로</pre></div>
+<div class="note">파일을 만드는 데 시간이 조금 걸릴 수 있습니다. 고칠 생각이라면 고친 다음에 저장해야 고친 내용이 파일에 들어갑니다.</div><div class="pager"><a class="btn ghost" href="#p3">← 실습 3 입력 점검</a><a class="btn" href="#record">내 기록 →</a></div></section></div><div class="page" id="sheet"><section><h2>활동지 | 우리 팀 AI 업무분류표</h2>
+<p class="sub">칸을 눌러 표시합니다. 다시 누르면 지워집니다. 인쇄하면 종이 활동지가 됩니다.</p>
+<div class="grid"><div class="cardbox"><b>① AI 활용 가능</b>AI에게 맡기고 결과만 확인</div><div class="cardbox"><b>② 사람 판단 중요</b>AI를 쓰되 판단은 내가</div><div class="cardbox"><b>③ AI 활용 주의</b>쓰지 않거나 아주 조심해서</div></div>
+<div id="ws-all"></div>
+<div class="tools"><button class="mini" type="button" onclick="window.print()">🖨 활동지 인쇄</button><button class="mini" type="button" id="ws-add">업무 한 줄 추가</button></div>
+<div class="legend"><span class="mk ai" style="display:inline-block;line-height:26px">②</span> AI가 고른 것 &nbsp; <span class="mk on" style="display:inline-block;line-height:26px">②</span> 내가 고른 것 &nbsp; <span class="circ">○</span> 2단계에서 고친 업무</div>
+<div class="pager"><a class="btn ghost" href="#p4">← 실습 4</a><a class="btn" href="#record">내 기록 →</a></div></section></div><div class="page" id="record"><section><h2>내 기록</h2>
+  <p class="sub">오늘 만든 분류표, ChatGPT 최종 결과, 고른 것과 직접 쓴 것, 최종 프롬프트가 남습니다. 이 컴퓨터의 이 브라우저에만 저장됩니다.</p>
+  <div class="warn">여러 사람이 함께 쓰는 PC라면 수업이 끝날 때 <b>[기록 지우기]</b>를 눌러 주세요. 보관하려면 먼저 <b>[기록 인쇄]</b>를 누릅니다.</div>
+  <div class="tools"><button class="mini" id="rec-print" type="button">🖨 기록 인쇄</button><button class="mini" id="rec-copy" type="button">기록 전체 복사</button><button class="mini" id="rec-clear" type="button">기록 지우기</button></div>
+  <div id="rec-list"></div>
+  <div class="pager"><a class="btn ghost" href="#start">← 처음으로</a><span></span></div></section></div>
+</div>
+<footer>AI 모닝클래스 | 판단에서 실행까지, 직책자의 AI 5일<br>※ 해당 문서는 배포 및 공유를 제한합니다</footer>
+<script>
+const CFG = {"day": "d1v2", "steps": [{"id": "p1", "name": "1 분류 맡기기", "fields": [{"key": "team", "type": "radio", "label": "① 우리 팀", "options": [{"v": "MD.상품기획", "label": "MD.상품기획", "desc": "상품총괄팀, 가공식품팀, 생활팀, 패션팀, 건강뷰티팀, 문화팀"}, {"v": "모바일상품.모바일운영", "label": "모바일상품.모바일운영", "desc": "모바일상품팀, 모바일운영팀"}, {"v": "방송기획.제작.공영라방", "label": "방송기획.제작.공영라방", "desc": "방송기획팀, 방송제작실, 방송제작3팀, 공영라방팀, 방송기술팀"}, {"v": "CS.CX", "label": "CS.CX", "desc": "고객만족팀, CX팀"}, {"v": "경영기획.재무.전략", "label": "경영기획.재무.전략", "desc": "기획조정팀, 경영관리팀, 경영지원실, 채널전략팀"}, {"v": "마케팅.홍보.브랜드", "label": "마케팅.홍보.브랜드", "desc": "마케팅팀, 홍보브랜드팀"}, {"v": "방송심의", "label": "방송심의", "desc": "방송심의팀"}, {"v": "IT.AX", "label": "IT.AX", "desc": "AX추진단, 정보전략팀, 정보운영팀"}, {"v": "디자인.영상", "label": "디자인.영상", "desc": "영상아트팀, 영상제작팀"}, {"v": "ESG.정책.대외협력", "label": "ESG.정책.대외협력", "desc": "ESG경영팀, 대외협력팀, 정책개발팀, T-커머스 사업 총괄 TF팀"}, {"v": "인사.교육.총무안전", "label": "인사.교육.총무안전", "desc": "인재육성팀, 총무안전팀"}, {"v": "품질.물류", "label": "품질.물류", "desc": "품질혁신팀, 물류혁신팀"}, {"v": "전사.본부 총괄", "label": "전사.본부 총괄", "desc": "대표이사, 본부장, 실장 (여러 팀 총괄)"}, {"v": "그 밖의 부서", "label": "그 밖의 부서", "desc": "목록에 없으면 부서 이름을 직접 씁니다"}], "empty": "[팀 선택 전]"}, {"key": "teamx", "type": "text", "label": "우리 부서 이름", "hint": "선택", "placeholder": "예: 고객만족팀"}, {"key": "tasks", "type": "check", "label": "② 내 업무와 비슷한 카드", "hint": "3~6개. 부서를 고르면 비슷한 카드가 미리 골라집니다. 내 업무에 맞게 바꾸세요", "options": [{"v": "주간 실적 보고 검토", "label": "주간 실적 보고 검토"}, {"v": "회의록 정리와 후속 업무 배분", "label": "회의록 정리와 후속 업무 배분"}, {"v": "팀원 1:1 면담 준비", "label": "팀원 1:1 면담 준비"}, {"v": "협력사 미팅 자료 검토", "label": "협력사 미팅 자료 검토"}, {"v": "편성안.방송 계획 검토", "label": "편성안.방송 계획 검토"}, {"v": "고객 불만 대응 방향 결정", "label": "고객 불만 대응 방향 결정"}, {"v": "예산 집행 계획 세우기", "label": "예산 집행 계획 세우기"}, {"v": "경영진 보고 자료 만들기", "label": "경영진 보고 자료 만들기"}, {"v": "사내 공지.안내문 작성", "label": "사내 공지.안내문 작성"}, {"v": "업계 동향.경쟁사 자료 조사", "label": "업계 동향.경쟁사 자료 조사"}, {"v": "팀원 성과 평가 의견 작성", "label": "팀원 성과 평가 의견 작성"}, {"v": "교육.행사 일정 조율", "label": "교육.행사 일정 조율"}], "max": 6, "join": "lines", "empty": "[업무 카드 선택 전]"}, {"key": "own", "type": "text", "label": "③ 카드에 없는 내 업무", "hint": "선택. 업무 이름만", "placeholder": "예: 협력사 품질 이슈 보고"}, {"key": "extra", "type": "text", "label": "④ AI가 알면 좋을 우리 팀 사정", "hint": "선택", "placeholder": "예: 협력사 대부분이 소규모 농가다"}], "template": "나는 공영홈쇼핑 {team}[[ ({teamx})]] 직책자다.\n아래는 내 업무 목록이다.\n{tasks}[[\n- {own}]]\n\n각 업무를 아래 세 가지 중 하나로 분류해서 표로 정리해줘.\n① AI 활용 가능\n② AI를 쓰되 사람 판단이 중요\n③ AI 활용 주의\n표의 열: 업무 | 분류 | 이유 한 줄 | AI를 쓸 때 주의할 점\n업무는 위 목록 순서 그대로 써줘.\n[[참고할 우리 팀 사정: {extra}\n]]우리 회사 내부 사정은 모를 테니 확신이 없는 부분은 [확인 필요]라고 표시해줘."}, {"id": "p2", "name": "2 고치기", "fields": [{"key": "task", "type": "radio", "label": "① 동의하지 않는 업무 1개", "from": "p1.tasks", "fromText": ["p1.own"], "empty": "[업무 선택 전]"}, {"key": "to", "type": "radio", "label": "② 어디로 옮길까요?", "options": [{"v": "AI 활용 가능", "label": "AI 활용 가능"}, {"v": "AI를 쓰되 사람 판단이 중요", "label": "AI를 쓰되 사람 판단이 중요"}, {"v": "AI 활용 주의", "label": "AI 활용 주의"}], "empty": "[분류 선택 전]"}, {"key": "reason", "type": "radio", "label": "③ 이유", "wide": true, "empty": "[이유 선택 전]", "options": [{"v": "사람 사이의 관계가 걸려 있다", "label": "사람 사이의 관계가 걸려 있다"}, {"v": "우리 회사 내부 사정을 알아야 판단할 수 있다", "label": "우리 회사 내부 사정을 알아야 판단할 수 있다"}, {"v": "결과에 내가 책임을 진다", "label": "결과에 내가 책임을 진다"}, {"v": "정해진 형식이 있어 AI에게 맡겨도 된다", "label": "정해진 형식이 있어 AI에게 맡겨도 된다"}, {"v": "개인정보나 내부자료가 들어간다", "label": "개인정보나 내부자료가 들어간다"}]}, {"key": "reasonx", "type": "text", "label": "④ 이유를 내 말로 한 줄", "hint": "선택", "placeholder": "예: 협력사와 오래 쌓은 관계라 표현 하나가 중요하다"}], "template": "위 표에서 '{task}' 업무의 분류를 '{to}'(으)로 바꿔줘.\n이유: {reason}[[ / {reasonx}]]\n이 이유를 반영해서 표 전체를 다시 정리하고 같은 이유로 함께 바꿔야 할 업무가 있으면 알려줘."}, {"id": "p3", "name": "3 입력 점검", "fields": [{"key": "types", "type": "check", "label": "① 우리 팀에서 조심할 자료", "hint": "여러 개 가능", "default": ["개인정보", "고객정보"], "join": ", ", "empty": "[자료 선택 전]", "options": [{"v": "개인정보", "label": "개인정보"}, {"v": "고객정보", "label": "고객정보"}, {"v": "협력사 계약과 단가", "label": "협력사 계약과 단가"}, {"v": "미공개 실적", "label": "미공개 실적"}, {"v": "인사 정보", "label": "인사 정보"}, {"v": "방송 심의 관련 자료", "label": "방송 심의 관련 자료"}]}, {"key": "typesx", "type": "text", "label": "② 그 밖에 조심할 자료", "hint": "선택", "placeholder": "예: 입점 심사 서류"}], "template": "위 표의 업무마다 AI에 넣어도 되는 자료와 빼야 하는 자료를 나눠줘.\n우리 팀에서 특히 조심할 자료: {types}[[, {typesx}]]\n표의 열: 업무 | 넣어도 되는 자료 | 빼야 하는 자료 | 빼고도 할 수 있는지\n업무는 처음 표의 순서 그대로 써줘.\n'빼고도 할 수 있는지' 칸은 맨 앞에 ✓(가능) △(일부 가능) ✗(어려움) 중 하나를 먼저 쓰고 뒤에 이유를 한 줄로 써줘.\n확신이 없는 부분은 [확인 필요]라고 표시해줘."}, {"id": "p4", "name": "4 팀 기준", "fields": [{"key": "final", "type": "ws", "label": "활동지 내 최종 분류"}, {"key": "form", "type": "radio", "label": "① 팀원에게 어떻게 전할까요?", "orText": "p4.formx", "empty": "[형식 선택 전]", "options": [{"v": "팀 회의에서 말할 3분 안내", "label": "팀 회의에서 말할 3분 안내"}, {"v": "메신저 공지 한 장", "label": "메신저 공지 한 장"}, {"v": "팀 내부 지침 한 장 (표 포함)", "label": "팀 내부 지침 한 장 (표 포함)"}]}, {"key": "formx", "type": "text", "label": "형식 직접 쓰기", "hint": "선택. 쓰면 위에서 고른 것 대신 들어갑니다", "placeholder": "예: 신입 팀원 안내용 한 쪽"}, {"key": "rules", "type": "check", "label": "② 꼭 넣을 원칙", "hint": "여러 개 가능", "join": "lines", "default": ["AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다"], "options": [{"v": "AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다", "label": "AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다"}, {"v": "AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다", "label": "AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다"}, {"v": "③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다", "label": "③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다"}, {"v": "개인정보와 고객정보는 어떤 경우에도 넣지 않는다", "label": "개인정보와 고객정보는 어떤 경우에도 넣지 않는다"}, {"v": "기관 계정(ChatGPT Edu)만 쓴다", "label": "기관 계정(ChatGPT Edu)만 쓴다"}, {"v": "숫자와 출처는 원문과 대조한 뒤 쓴다", "label": "숫자와 출처는 원문과 대조한 뒤 쓴다"}, {"v": "외부로 나가는 문서는 직책자가 확인한 뒤 보낸다", "label": "외부로 나가는 문서는 직책자가 확인한 뒤 보낸다"}, {"v": "AI 결과만으로 사람을 평가하지 않는다", "label": "AI 결과만으로 사람을 평가하지 않는다"}]}, {"key": "add", "type": "text", "label": "③ 덧붙일 말", "hint": "선택", "placeholder": "예: 처음 한 달은 결과물을 나와 같이 본다"}], "template": "지금까지 정리한 내용을 바탕으로 팀원에게 전할 '우리 팀 AI 사용 기준'을 만들어줘.\n\n내가 최종으로 정한 업무 분류 (AI 분류와 다르면 이것을 따른다):\n{final}\n\n전할 형식: {form}\n꼭 넣을 원칙:\n{rules}[[\n덧붙일 말: {add}]]\n\n구성:\n1. ① 업무: AI로 먼저 하고 담당자가 결과를 확인한다\n2. ② 업무: AI 초안 뒤 직책자가 판단한다\n3. ③ 업무: 빼야 할 자료와 쓰는 방법\n업무 이름은 위 목록 그대로 쓰고 목록에 없는 내용은 만들지 말고 [확인 필요]로 표시해줘."}]};
+const KEY = 'aiclass_leader_' + CFG.day;
+let S = {sel:{}, txt:{}, edit:{}, rec:{}};
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function optionsOf(step, f){
+  if (!f.from) return f.options;
+  const [sid, key] = f.from.split('.');
+  const src = CFG.steps.find(x => x.id === sid);
+  const sf = src.fields.find(x => x.key === key);
+  let vals = (S.sel[sid+'.'+key] || []).map(v => (sf.options.find(o => o.v === v) || {label:v}).label);
+  (f.fromText || []).forEach(t => { const tv = (S.txt[t]||'').trim(); if (tv) vals.push(tv); });
+  if (!vals.length) return [{v:'', label:'(1단계에서 고른 업무가 여기에 나타납니다)', disabled:true}];
+  return vals.map(v => ({v, label:v}));
+}
+function labelOf(step, f, v){ const o = optionsOf(step, f).find(o => o.v === v); return o ? (o.value || o.label) : v; }
+
+function renderFields(step){
+  const host = document.getElementById('fields-' + step.id);
+  host.innerHTML = '';
+  step.fields.forEach(f => {
+    if (f.type === 'ws') return;
+    const id = step.id + '.' + f.key;
+    const box = document.createElement('div'); box.className = 'field';
+    box.innerHTML = '<div class="flabel">' + esc(f.label) + (f.hint ? '<small>' + esc(f.hint) + '</small>' : '') + '</div>';
+    if (f.type === 'text') {
+      const inp = document.createElement('input'); inp.className = 'line'; inp.placeholder = f.placeholder || '';
+      inp.value = S.txt[id] || '';
+      inp.addEventListener('input', () => { S.txt[id] = inp.value; S.edit[step.id] = null; save(); renderPreview(step); });
+      box.appendChild(inp);
+    } else {
+      const wrap = document.createElement('div'); wrap.className = 'chips';
+      const cur = S.sel[id] || (f.default ? [].concat(f.default) : []);
+      if (!S.sel[id] && f.default) S.sel[id] = cur;
+      optionsOf(step, f).forEach(o => {
+        const b = document.createElement('button'); b.type = 'button';
+        b.className = 'chip' + (f.wide ? ' wide' : '') + (cur.includes(o.v) && o.v ? ' on' : '');
+        b.innerHTML = esc(o.label) + (o.desc ? '<span class="d">' + esc(o.desc) + '</span>' : '');
+        if (o.gray) { b.style.opacity = .5; b.style.background = '#f1f1f1'; } if (o.disabled) { b.disabled = true; b.style.opacity = .6; }
+        b.addEventListener('click', () => {
+          let arr = S.sel[id] || [];
+          if (f.type === 'radio') arr = arr.includes(o.v) ? [] : [o.v];
+          else if (arr.includes(o.v)) arr = arr.filter(x => x !== o.v);
+          else { if (f.max && arr.length >= f.max) { alert('최대 ' + f.max + '개까지 고를 수 있습니다.'); return; } arr = arr.concat(o.v); }
+          if (f.type === 'check' && f.options) arr = arr.slice().sort((a, b) => f.options.findIndex(x => x.v === a) - f.options.findIndex(x => x.v === b));
+          S.sel[id] = arr; S.edit[step.id] = null; save();
+          renderFields(step); renderPreview(step);
+          if (window.afterPick) afterPick(step);
+          CFG.steps.forEach(st => { if (st !== step && st.fields.some(x => x.from && x.from.startsWith(step.id + '.'))) { renderFields(st); renderPreview(st); } });
+        });
+        wrap.appendChild(b);
+      });
+      box.appendChild(wrap);
+      if (f.showAgenda) {
+        const sel = (S.sel[id] || [])[0]; const o = f.options.find(x => x.v === sel);
+        if (o && o.detail) { const ag = document.createElement('div'); ag.className = 'agenda'; ag.innerHTML = o.detail; box.appendChild(ag); }
+      }
+    }
+    host.appendChild(box);
+  });
+}
+
+// 프롬프트 만들기: {key} 치환, [[ ... ]] 는 안의 값이 비면 통째로 뺌
+function build(step, html){
+  const val = key => {
+    const f = step.fields.find(x => x.key === key);
+    const id = step.id + '.' + key;
+    if (!f) return {t:'', mine:false};
+    if (f.type === 'ws') { const t = wsText(); return {t, mine:false, empty:'[활동지에 표시한 업무 없음]'}; }
+    if (f.type === 'text') { const t = (S.txt[id] || '').trim(); return {t, mine:true}; }
+    if (f.orText) { const ot = (S.txt[f.orText]||'').trim(); if (ot) return {t:ot, mine:true}; }
+    const arr = (S.sel[id] || []).filter(Boolean).map(v => labelOf(step, f, v));
+    if (!arr.length) return {t:'', mine:false, empty:f.empty || ''};
+    if (f.join === 'lines') return {t: arr.map(a => '- ' + a).join('\n'), mine:false};
+    if (f.join === 'num') return {t: arr.map((a,i) => (i+1) + '. ' + a).join('\n'), mine:false};
+    return {t: arr.join(f.join || ', '), mine:false};
+  };
+  const fill = (seg) => seg.replace(/\{(\w+)\}/g, (_, k) => {
+    const v = val(k);
+    if (!v.t) return html ? '<mark>' + esc(v.empty || '[선택 전]') + '</mark>' : (v.empty || '[선택 전]');
+    return html ? '<mark' + (v.mine ? ' class="mine"' : '') + '>' + esc(v.t) + '</mark>' : v.t;
+  });
+  let tpl = step.template;
+  tpl = tpl.replace(/\[\[([\s\S]*?)\]\]/g, (_, inner) => {
+    const keys = [...inner.matchAll(/\{(\w+)\}/g)].map(m => m[1]);
+    return keys.every(k => val(k).t) ? inner : '';
+  });
+  if (!html) return fill(tpl);
+  // html: 고정 문구는 이스케이프, 값은 mark
+  return tpl.split(/(\{\w+\})/).map(p => /^\{\w+\}$/.test(p) ? fill(p) : esc(p)).join('');
+}
+
+function tokens(s){ return s.split(/(\s+)/).filter(x => x !== ''); }
+function diffHTML(a, b){
+  const A = tokens(a), B = tokens(b), n = A.length, m = B.length;
+  const L = Array.from({length:n+1}, () => new Array(m+1).fill(0));
+  for (let i=n-1;i>=0;i--) for (let j=m-1;j>=0;j--) L[i][j] = A[i]===B[j] ? L[i+1][j+1]+1 : Math.max(L[i+1][j], L[i][j+1]);
+  let i=0,j=0,out='',changes=[],del='',ins='';
+  const flush = () => { if (del||ins) { changes.push({from:del.trim(), to:ins.trim()}); out += (del?'<del>'+esc(del)+'</del>':'') + (ins?'<ins>'+esc(ins)+'</ins>':''); del=''; ins=''; } };
+  while (i<n && j<m) { if (A[i]===B[j]) { flush(); out += esc(A[i]); i++; j++; } else if (L[i+1][j] >= L[i][j+1]) { del += A[i++]; } else { ins += B[j++]; } }
+  while (i<n) del += A[i++]; while (j<m) ins += B[j++]; flush();
+  return {html: out, changes: changes.filter(c => c.from.trim() || c.to.trim())};
+}
+
+function renderPreview(step){
+  const pv = document.getElementById('pv-' + step.id);
+  const gen = build(step, false);
+  const edited = S.edit[step.id];
+  pv.querySelector('pre').innerHTML = build(step, true);
+  const ed = pv.querySelector('.edit'), df = pv.querySelector('.diff');
+  if (edited != null) {
+    ed.style.display = 'block'; if (ed.value !== edited) ed.value = edited;
+    const d = diffHTML(gen, edited);
+    df.style.display = d.changes.length ? 'block' : 'none';
+    df.innerHTML = '<b>최종 프롬프트</b> (빨간 글씨가 내가 직접 고친 부분이며 복사할 때 그대로 들어갑니다)<br>' + d.html.replace(/\n/g,'<br>');
+  } else { ed.style.display = 'none'; df.style.display = 'none'; }
+}
+
+function finalPrompt(step){ return S.edit[step.id] != null ? S.edit[step.id] : build(step, false); }
+
+function record(step){
+  const choices = [], typed = [];
+  step.fields.forEach(f => {
+    const id = step.id + '.' + f.key;
+    if (f.type === 'text') { const t = (S.txt[id]||'').trim(); if (t) typed.push(f.label + ': ' + t); }
+    else { const a = (S.sel[id]||[]).filter(Boolean).map(v => labelOf(step, f, v)); if (a.length) choices.push(f.label + ': ' + a.join(' / ')); }
+  });
+  const edits = S.edit[step.id] != null ? diffHTML(build(step,false), S.edit[step.id]).changes : [];
+  S.rec[step.id] = {name: step.name, choices, typed, edits, final: finalPrompt(step)};
+  save(); renderRecord();
+}
+
+function renderRecord(){
+  const host = document.getElementById('rec-list'); if (!host) return;
+  const ids = CFG.steps.filter(s => s.template).map(s => s.id);
+  const has = ids.filter(id => S.rec[id]);
+  if (!has.length) { host.innerHTML = '<p class="empty">아직 기록이 없습니다. 각 단계에서 [프롬프트 복사]를 누르면 여기에 남습니다.</p>'; return; }
+  host.innerHTML = has.map(id => { const r = S.rec[id];
+    return '<div class="rec"><h4>' + esc(r.name) + '</h4>' +
+      (r.choices.length ? '<div class="k">내가 고른 것</div><div>' + r.choices.map(esc).join('<br>') + '</div>' : '') +
+      (r.typed.length ? '<div class="k" style="margin-top:6px">내가 직접 쓴 것</div><div style="color:var(--red)">' + r.typed.map(esc).join('<br>') + '</div>' : '') +
+      (r.edits.length ? '<div class="k" style="margin-top:6px">프롬프트에서 직접 고친 부분</div><div>' + r.edits.map(c => (c.from ? '<del>' + esc(c.from) + '</del> → ' : '추가: ') + '<b style="color:var(--red)">' + esc(c.to || '(삭제)') + '</b>').join('<br>') + '</div>' : '') +
+      '<div class="k" style="margin-top:6px">최종 프롬프트</div><pre>' + esc(r.final) + '</pre></div>'; }).join('');
+}
+
+function copyText(text, btn){
+  const label = btn.textContent;
+  const done = () => { btn.textContent = '복사됨! ChatGPT 입력창에 붙여넣으세요 (Ctrl + V)'; btn.classList.add('done');
+    setTimeout(() => { btn.textContent = label; btn.classList.remove('done'); }, 2200); };
+  const fallback = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch(e) { alert('복사하지 못했습니다. 미리보기를 직접 선택해 복사해 주세요.'); } t.remove(); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+}
+
+// 사실/해석 분류 카드
+function renderSort(){
+  document.querySelectorAll('[data-sort]').forEach(host => {
+    const items = CFG.sort[host.dataset.sort];
+    host.innerHTML = '';
+    items.forEach((it, i) => {
+      const c = document.createElement('div'); c.className = 'sortcard';
+      c.innerHTML = '<span>' + esc(it.t) + '</span><span class="opts"></span><span class="res"></span>';
+      ['사실','해석'].forEach(lab => { const b = document.createElement('button'); b.type='button'; b.className='chip'; b.textContent = lab;
+        b.addEventListener('click', () => { c.querySelectorAll('.chip').forEach(x => x.classList.remove('on')); b.classList.add('on');
+          const r = c.querySelector('.res'); const ok = lab === it.a; r.className = 'res ' + (ok ? 'ok' : 'no');
+          r.textContent = (ok ? '맞습니다. ' : '다시 보세요. ') + it.why; });
+        c.querySelector('.opts').appendChild(b); });
+      host.appendChild(c);
+    });
+  });
+}
+
+function init(){
+  CFG.steps.forEach(step => {
+    if (!step.template) return;
+    renderFields(step);
+    const pv = document.getElementById('pv-' + step.id);
+    pv.querySelector('.bigcopy').addEventListener('click', e => { record(step); copyText(finalPrompt(step), e.currentTarget); });
+    pv.querySelector('.do-edit').addEventListener('click', () => { if (S.edit[step.id] == null) S.edit[step.id] = build(step, false); save(); renderPreview(step); pv.querySelector('.edit').focus(); });
+    pv.querySelector('.do-reset').addEventListener('click', () => { S.edit[step.id] = null; save(); renderPreview(step); });
+    pv.querySelector('.edit').addEventListener('input', e => { S.edit[step.id] = e.target.value; save(); renderPreview(step); });
+    renderPreview(step);
+  });
+  renderSort(); renderRecord();
+  const rp = document.getElementById('rec-print'); if (rp) rp.addEventListener('click', () => window.print());
+  const rc = document.getElementById('rec-copy'); if (rc) rc.addEventListener('click', e => copyText(document.getElementById('rec-list').innerText, e.currentTarget));
+  const rx = document.getElementById('rec-clear'); if (rx) rx.addEventListener('click', () => { if (confirm('이 페이지에서 고른 것과 기록을 모두 지울까요?')) { S = {sel:{}, txt:{}, edit:{}, rec:{}, ws:{rows:[], raw:{}}}; save(); location.reload(); } });
+}
+
+/* 화면 전환 (템플릿 그대로) */
+const pages = [...document.querySelectorAll('.page')];
+function show(id) {
+  if (!id) { try { id = location.hash.slice(1); } catch (e) {} }
+  const el = id && document.getElementById(id);
+  const target = el && el.classList.contains('page') ? id : 'start';
+  pages.forEach(p => p.classList.toggle('on', p.id === target));
+  document.querySelectorAll('#menu a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + target));
+  try { history.replaceState(null, '', '#' + target); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; e.preventDefault(); show(a.getAttribute('href').slice(1)); });
+
+const INSTR = false;
+if (!S.ws) S.ws = {rows:[], raw:{}};
+const CN = ['','①','②','③'];
+
+function norm(s){ return String(s||'').replace(/\(.*?\)/g,'').replace(/[\s*`.,·ㆍ•‧∙\/\-_:;'"“”‘’!?~]/g,'').toLowerCase(); }
+function parseTable(text){
+  const lines = String(text||'').replace(/<br\s*\/?>/gi, ' / ').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  let rows = [];
+  lines.forEach(l => {
+    let cells = null;
+    if (l.includes('|')) { cells = l.split('|').map(c => c.trim()); if (cells[0]==='') cells.shift(); if (cells[cells.length-1]==='') cells.pop(); }
+    else if (l.includes('\t')) cells = l.split('\t').map(c => c.trim());
+    if (!cells || cells.length < 2) return;
+    if (cells.every(c => /^:?-{2,}:?$/.test(c) || c==='')) return;
+    rows.push(cells.map(c => c.replace(/\*\*/g,'')));
+  });
+  if (!rows.length) return {head:[], body:[]};
+  const isHead = rows[0].some(c => /업무/.test(c)) && rows[0].some(c => /분류|자료|이유/.test(c));
+  return isHead ? {head: rows[0], body: rows.slice(1)} : {head: [], body: rows};
+}
+// 가장 먼저 나오는 표시를 분류로 본다 (뒤쪽 설명에 다른 말이 섞여도 흔들리지 않게)
+function clsOf(t){ t = String(t||''); let best = 0, pos = 1e9;
+  [[/①|활용\s*가능/,1],[/②|사람\s*판단/,2],[/③|활용\s*주의/,3]].forEach(([re,c]) => { const m = t.search(re); if (m >= 0 && m < pos) { pos = m; best = c; } });
+  return best; }
+// 칸의 맨 앞(기호 또는 첫 마디)만 본다. 예: '일부 가능 — ... 판단은 어려움' → 일부 가능
+function chkOf(t){ t = String(t||'').replace(/^[\s*]+/,'');
+  if (/^(✓|✔|☑|v\b|V\b|O\b|○)/.test(t)) return 'o'; if (/^(△|▲|◐)/.test(t)) return 'm'; if (/^(✗|✘|×|X\b|x\b)/.test(t)) return 'x';
+  const head = t.split(/[—–:(,.\/]| - /)[0];
+  if (/일부/.test(head)) return 'm'; if (/어려|불가/.test(head)) return 'x'; if (/가능/.test(head)) return 'o'; return ''; }
+const CHK = {o:'✓', m:'△', x:'✗'};
+
+function selectedTasks(){
+  const opts = CFG.steps[0].fields.find(f => f.key === 'tasks').options;
+  const a = (S.sel['p1.tasks']||[]).slice().sort((x, y) => opts.findIndex(o => o.v === x) - opts.findIndex(o => o.v === y)); const own = (S.txt['p1.own']||'').trim(); if (own) a.push(own); return a;
+}
+function findRow(name){ const n = norm(name); if (!n) return null;
+  return S.ws.rows.find(r => norm(r.task) === n) || S.ws.rows.find(r => { const m = norm(r.task); return m && m.length >= 4 && n.length >= 4 && (m.includes(n) || n.includes(m)); }); }
+function syncRows(){
+  const order = selectedTasks(); const own = (S.txt['p1.own']||'').trim(); const old = S.ws.rows || [];
+  const used = new Set(); const pick = t => { const n = norm(t); const r = old.find(r => !used.has(r) && norm(r.task) === n); if (r) used.add(r); return r; };
+  const rows = order.map(t => { let r = pick(t);
+    if (!r && t === own) { r = old.find(x => x.own && !used.has(x)); if (r) { used.add(r); r.task = t; } }
+    if (!r) r = {task:t, mine:0, ai:0, fin:0, chk:'', fixed:false};
+    r.own = (t === own); return r; });
+  old.forEach(r => { if (used.has(r) || !r.added || rows.includes(r)) return;
+    const twin = rows.find(x => norm(x.task) === norm(r.task));
+    if (twin) { ['mine','ai','fin','chk'].forEach(k => { if (!twin[k] && r[k]) twin[k] = r[k]; }); return; }
+    rows.push(r); });
+  S.ws.rows = rows;
+  const rank = r => { const n = norm(r.task); const i = order.findIndex(t => { const m = norm(t); return m === n || m.includes(n) || n.includes(m); }); return i < 0 ? 999 : i; };
+  S.ws.rows.sort((a, b) => rank(a) - rank(b));
+}
+function applyPaste1(text){
+  S.ws.raw.p1 = text; syncRows(); const t = parseTable(text);
+  const ti = Math.max(0, t.head.findIndex(h => /업무/.test(h)));
+  let ci = t.head.findIndex(h => /분류/.test(h));
+  let n = 0;
+  if (!t.body.length) {  // 표가 아닌 문단형 답변: 내가 고른 업무 이름이 들어간 줄에서 분류를 찾는다
+    const lines = String(text).split(/\r?\n/);
+    selectedTasks().forEach(task => { const ln = lines.find(l => norm(l).includes(norm(task)) && clsOf(l));
+      if (ln) { let r = findRow(task); if (!r) { r = {task, mine:0, ai:0, fin:0, chk:'', fixed:false, added:true}; S.ws.rows.push(r); } r.ai = clsOf(ln); n++; } });
+    save(); return n;
+  }
+  t.body.forEach(cells => {
+    const name = cells[ti] || cells[0]; const c = ci >= 0 ? clsOf(cells[ci]) : clsOf(cells.slice(1).join(' '));
+    if (!name || !c) return;
+    let r = findRow(name); if (!r) { r = {task:name, mine:0, ai:0, fin:0, chk:'', fixed:false, added:true}; S.ws.rows.push(r); }
+    r.ai = c; n++;
+  });
+  save(); return n;
+}
+function applyPaste3(text){
+  S.ws.raw.p3 = text; const t = parseTable(text);
+  const ti = Math.max(0, t.head.findIndex(h => /업무/.test(h)));
+  const ki = t.head.findIndex(h => /빼고|할\s*수/.test(h));
+  let n = 0;
+  t.body.forEach(cells => { const name = cells[ti] || cells[0]; const k = chkOf(ki >= 0 ? cells[ki] : cells[cells.length-1]);
+    if (!name || !k) return; const r = findRow(name); if (r) { r.chk = k; n++; } });
+  save(); return n;
+}
+function reflectCheck(text){
+  text = String(text||''); if (!text.trim()) return null;
+  const own = (S.txt['p1.own']||'').trim(), extra = (S.txt['p1.extra']||'').trim(), out = [];
+  if (own) out.push({k:'카드에 없는 내 업무', v:own, ok: norm(text).includes(norm(own))});
+  if (extra) { const words = extra.split(/[\s,.]+/).map(w => w.replace(/(이다|이고|이며|라서|에서|으로|이|가|은|는|을|를|의|도|다)$/,'')).filter(w => w.length >= 2);
+    let body = text; selectedTasks().concat(S.ws.rows.map(r => r.task)).forEach(t => { body = body.split(t).join(' '); });
+    const hit = words.filter(w => body.includes(w));
+    out.push({k:'우리 팀 사정', v:extra, ok: hit.length > 0, hit}); }
+  return out;
+}
+function reflectHTML(text){ const r = reflectCheck(text); if (!r || !r.length) return '';
+  return '<div class="say">' + r.map(x => (x.ok ? '✅ ' : '⚠️ ') + '<b>' + x.k + '</b> "' + esc(x.v) + '" ' + (x.ok ? '답변에 반영됨' + (x.hit ? ' (' + esc(x.hit.join(', ')) + ')' : '') : '답변에서 찾지 못함')).join('<br>') + '</div>'; }
+function optionsOf(step, f){
+  if (!f.from) return f.options;
+  const [sid, key] = f.from.split('.');
+  const src = CFG.steps.find(x => x.id === sid);
+  const sf = src.fields.find(x => x.key === key);
+  let vals = (S.sel[sid+'.'+key] || []).map(v => (sf.options.find(o => o.v === v) || {label:v}).label);
+  (f.fromText || []).forEach(t => { const tv = (S.txt[t]||'').trim(); if (tv) vals.push(tv); });
+  if (!vals.length) return [{v:'', label:'(1단계에서 고른 업무가 여기에 나타납니다)', disabled:true}];
+  let opts = vals.map(v => ({v, label:v}));
+  if (f.byFinal) {
+    opts.forEach(o => { const r = findRow(o.v); const c = r ? (r.fin || r.ai) : 0;
+      o.warn = !!(r && (c === 3 || r.chk === 'x')); o.rank = o.warn ? 3 : (c === 1 ? 0 : c === 2 ? 1 : 2);
+      o.desc = o.warn ? '주의 업무' : (c ? '내 최종 분류 ' + CN[c] : ''); o.gray = o.warn; });
+    opts.sort((a, b) => a.rank - b.rank);
+  }
+  return opts;
+}
+function wsText(){ syncRows(); return S.ws.rows.filter(r => r.fin || r.ai).map(r => '- ' + r.task + ': ' + ({1:'① AI 활용 가능',2:'② AI를 쓰되 사람 판단이 중요',3:'③ AI 활용 주의'})[r.fin || r.ai] + (r.chk ? ' / 입력 점검 ' + CHK[r.chk] : '')).join('\n'); }
+function counts(){ const c = {1:0,2:0,3:0}; S.ws.rows.forEach(r => { if (r.ai) c[r.ai]++; }); return c; }
+
+/* 활동지 표 */
+function wsTable(host, cols){
+  syncRows();
+  const fixedTask = (S.sel['p2.task']||[])[0];
+  S.ws.rows.forEach(r => r.fixed = !!(fixedTask && norm(fixedTask) && (norm(r.task).includes(norm(fixedTask)) || norm(fixedTask).includes(norm(r.task)))));
+  if (!S.ws.rows.length) { host.innerHTML = '<p class="empty">1단계에서 업무 카드를 고르면 여기에 표가 생깁니다.</p>'; return; }
+  const H = {mine:'내 생각 (AI 보기 전)', ai:'AI 분류', fin:'내 최종 분류', chk:'입력 점검<br>(빼고도 할 수 있나)'};
+  let h = '<table class="ws"><tr><th>업무</th>' + cols.map(c => '<th>' + H[c] + '</th>').join('') + '</tr>';
+  S.ws.rows.forEach((r, i) => {
+    h += '<tr><td class="tn">' + (r.fixed ? '<span class="circ">' + esc(r.task) + '</span>' : esc(r.task)) + '</td>';
+    cols.forEach(c => {
+      if (c === 'chk') { h += '<td>' + ['o','m','x'].map(k => '<button class="mk' + (r.chk===k?' on':'') + '" data-i="'+i+'" data-c="chk" data-v="'+k+'" type="button">' + CHK[k] + '</button>').join('') + '</td>'; return; }
+      if (c === 'ai') { h += '<td>' + (r.ai ? '<span class="mk ai" style="display:inline-block;line-height:26px">' + CN[r.ai] + '</span>' : '<span style="color:#bbb">붙여넣기 전</span>') + '</td>'; return; }
+      const cur = c === 'fin' ? (r.fin || 0) : r.mine;
+      h += '<td>' + [1,2,3].map(k => '<button class="mk' + (cur===k?' on':'') + (c==='fin' && !r.fin && r.ai===k ? ' ai' : '') + '" data-i="'+i+'" data-c="'+c+'" data-v="'+k+'" type="button">' + CN[k] + '</button>').join('') + '</td>';
+    });
+    h += '</tr>';
+  });
+  host.innerHTML = h + '</table>';
+  host.querySelectorAll('.mk[data-c]').forEach(b => b.addEventListener('click', () => {
+    const r = S.ws.rows[+b.dataset.i]; const c = b.dataset.c; let v = b.dataset.c === 'chk' ? b.dataset.v : +b.dataset.v;
+    r[c] = r[c] === v ? (c==='chk' ? '' : 0) : v; if (c === 'fin') { delete r.p2set; delete r.finBak; } save(); renderWS();
+  }));
+}
+function renderWS(){
+  const m = {'ws-p1':['mine','ai'], 'ws-p2':['ai','fin'], 'ws-p3':['fin','chk'], 'ws-all':['mine','ai','fin','chk']};
+  Object.keys(m).forEach(id => { const el = document.getElementById(id); if (el) wsTable(el, m[id]); });
+  renderHint(); renderRecord();
+  const s4 = CFG.steps.find(x => x.id === 'p4'); if (s4 && document.getElementById('fields-p4')) { renderFields(s4); renderPreview(s4); }
+}
+
+/* 규칙: 1단계 결과 → 2단계 추천 */
+const FORMAL = /회의록|공지|안내문|조사|동향|일정|정리/;
+const RELATION = /면담|평가|불만|협력사|고객/;
+function recommend(){
+  const c = counts(), total = c[1]+c[2]+c[3];
+  if (!total) return null;
+  if (c[1] === 0) {
+    const r = S.ws.rows.find(r => r.ai && r.ai !== 1 && FORMAL.test(r.task)) || S.ws.rows.find(r => r.ai === 2);
+    return {kind:'zero', task: r && r.task, to:'AI 활용 가능', reason:'정해진 형식이 있어 AI에게 맡겨도 된다',
+      hint:'AI가 ①을 하나도 고르지 않았다면 회의록, 공지, 조사처럼 <b>형식이 정해진 업무</b>를 ①로 옮겨 보는 분들이 많아요.',
+      say:'AI는 생각보다 조심스럽습니다. 맡겨도 되는 일을 찾아 주는 건 리더의 몫입니다.'};
+  }
+  if (c[1] >= Math.ceil(total/2)) {
+    const r = S.ws.rows.find(r => r.ai === 1 && RELATION.test(r.task)) || S.ws.rows.find(r => r.ai === 1);
+    return {kind:'many', task: r && r.task, to:'AI를 쓰되 사람 판단이 중요', reason:'사람 사이의 관계가 걸려 있다',
+      hint:'①이 절반을 넘었다면 면담, 평가, 불만 대응처럼 <b>사람 사이 관계가 걸린 업무</b>를 ②로 옮겨 보는 분들이 많아요.',
+      say:'AI는 사람 사이 일의 무게를 모릅니다. 그 무게를 아는 사람이 직책자입니다.'};
+  }
+  const r = S.ws.rows.find(r => r.ai === 2 && /보고|예산|편성/.test(r.task)) || S.ws.rows.find(r => r.ai === 2) || S.ws.rows[0];
+  return {kind:'even', task: r && r.task, to:'AI 활용 주의', reason:'결과에 내가 책임을 진다',
+    hint:'고르게 나뉘었다면 <b>결과에 내가 책임지는 업무</b>가 어디 있는지 먼저 보는 분들이 많아요.',
+    say:'같은 표를 보고도 팀마다 답이 다릅니다. 저는 이 업무가 다르다고 봅니다. 여러분은 어디가 다릅니까?'};
+}
+function renderHint(){
+  const el = document.getElementById('hint-p2'); if (!el) return;
+  const r = recommend();
+  el.innerHTML = '<div class="hint">💡 <b>참고</b> ' + (r ? r.hint : '1단계 결과를 붙여넣으면 우리 결과에 맞는 참고가 여기에 나옵니다. AI가 너무 조심스럽거나 너무 쉽게 맡겼다면 그 업무가 고칠 후보입니다.') +
+    '<br><span style="color:var(--dim);font-size:13px">정답이 아닙니다. 우리 팀 사정이 다르면 다르게 고르세요.</span></div>';
+}
+
+/* 붙여넣기 칸 */
+function bindPaste(){
+  const p1 = document.getElementById('paste-p1');
+  if (p1) { p1.value = S.ws.raw.p1 || ''; p1.addEventListener('input', () => { const n = applyPaste1(p1.value);
+    document.getElementById('pastemsg-p1').innerHTML = n ? '<span class="ok">AI 분류 ' + n + '건을 표에 넣었습니다.</span>' : '<span class="empty">표를 찾지 못했습니다. 답변 아래 복사 아이콘으로 다시 복사해 주세요.</span>';
+    ['p2','p4'].forEach(id => { const st = CFG.steps.find(s => s.id === id); renderFields(st); renderPreview(st); }); renderWS(); if (window.panelSync) panelSync('p1', p1.value); }); }
+  const p3 = document.getElementById('paste-p3');
+  if (p3) { p3.value = S.ws.raw.p3 || ''; p3.addEventListener('input', () => { const n = applyPaste3(p3.value);
+    document.getElementById('pastemsg-p3').innerHTML = n ? '<span class="ok">입력 점검 ' + n + '건을 표에 넣었습니다.</span>' : '<span class="empty">표의 \'빼고도 할 수 있는지\' 칸을 찾지 못했습니다. 직접 눌러 표시해도 됩니다.</span>';
+    renderWS(); if (window.panelSync) panelSync('p3', p3.value); }); }
+  const p4 = document.getElementById('paste-p4');
+  if (p4) { p4.value = S.ws.raw.p4 || ''; p4.addEventListener('input', () => { S.ws.raw.p4 = p4.value; save(); renderRecord();
+    document.getElementById('pastemsg-p4').innerHTML = p4.value.trim() ? '<span class="ok">[내 기록]에 저장했습니다.</span>' : ''; }); }
+  const add = document.getElementById('ws-add');
+  if (add) add.addEventListener('click', () => { const t = prompt('추가할 업무 이름'); if (t && t.trim()) { S.ws.rows.push({task:t.trim(), mine:0, ai:0, fin:0, chk:'', added:true}); save(); renderWS(); } });
+}
+
+/* 1단계 업무 선택이 바뀌면 표도 갱신 */
+const PANEL_MAP = {p1:'a', p2:'a', p3:'b'};
+function panelFollow(){ const pn = document.getElementById('panel'); if (!pn) return; let id = ''; try { id = location.hash.slice(1); } catch (e) {}
+  const t = PANEL_MAP[id]; if (!t) return; const b = pn.querySelector('.ptab button[data-t="' + t + '"]'); if (b && !b.classList.contains('on')) b.click(); }
+function p2Fin(){
+  syncRows(); const task = (S.sel['p2.task']||[])[0], to = (S.sel['p2.to']||[])[0];
+  const k = CFG.steps.find(x => x.id === 'p2').fields.find(f => f.key === 'to').options.findIndex(o => o.v === to) + 1;
+  S.ws.rows.forEach(r => { if (r.p2set && (norm(r.task) !== norm(task||'') || !k)) { r.fin = r.finBak || 0; delete r.p2set; delete r.finBak; } });
+  const r = task && S.ws.rows.find(r => norm(r.task) === norm(task));
+  if (r && k) { if (!r.p2set) { r.finBak = r.fin || 0; r.p2set = true; } r.fin = k; }
+  save();
+}
+function sortTasks(){
+  const opts = CFG.steps[0].fields.find(f => f.key === 'tasks').options; const a = S.sel['p1.tasks']; if (!a || !a.length) return;
+  const b = a.slice().sort((x, y) => opts.findIndex(o => o.v === x) - opts.findIndex(o => o.v === y));
+  if (b.join('|') === a.join('|')) return; S.sel['p1.tasks'] = b; S.edit['p1'] = null; save();
+  CFG.steps.forEach(x => { if (x.id === 'p1' || x.fields.some(f => f.from && f.from.startsWith('p1.'))) renderPreview(x); });
+  CFG.steps.forEach(x => { if (x.id !== 'p1' && x.fields.some(f => f.from && f.from.startsWith('p1.'))) renderFields(x); });
+}
+function afterPick(step){ if (step.id === 'p1') { teamAuto(); sortTasks(); addExamples(); renderWS(); } if (step.id === 'p2') { p2Fin(); renderWS(); } }
+document.addEventListener('input', e => { if (e.target.closest('#fields-p1')) setTimeout(renderWS, 0); });
+
+/* 내 기록: 단계별 프롬프트 + 활동지 + ChatGPT 최종 결과 */
+function renderRecord(){
+  const host = document.getElementById('rec-list'); if (!host) return;
+  const ids = CFG.steps.filter(s => s.template).map(s => s.id).filter(id => S.rec[id]);
+  let h = '';
+  if (S.ws && S.ws.rows.length) {
+    h += '<div class="rec"><h4>우리 팀 AI 업무분류표</h4><table class="ws"><tr><th>업무</th><th>내 생각</th><th>AI</th><th>내 최종</th><th>입력 점검</th></tr>' +
+      S.ws.rows.map(r => '<tr><td class="tn">' + (r.fixed ? '<span class="circ">' + esc(r.task) + '</span>' : esc(r.task)) + '</td><td>' + (CN[r.mine]||'') + '</td><td>' + (CN[r.ai]||'') + '</td><td><b style="color:var(--red)">' + (CN[r.fin || r.ai]||'') + '</b></td><td>' + (CHK[r.chk]||'') + '</td></tr>').join('') + '</table></div>';
+  }
+  if (S.ws && S.ws.raw.p1) { const rf = reflectHTML(S.ws.raw.p1); if (rf) h += '<div class="rec"><h4>직접 쓴 내용이 AI 답에 반영됐나</h4>' + rf + '</div>'; }
+  if (S.ws && (S.ws.raw.p4||'').trim()) h += '<div class="rec"><h4>우리 팀 AI 사용 기준 (실습 4 결과)</h4><div class="gptfinal">' + esc(S.ws.raw.p4) + '</div></div>';
+  h += ids.map(id => { const r = S.rec[id];
+    return '<div class="rec"><h4>' + esc(r.name) + '</h4>' +
+      (r.choices.length ? '<div class="k">내가 고른 것</div><div>' + r.choices.map(esc).join('<br>') + '</div>' : '') +
+      (r.typed.length ? '<div class="k" style="margin-top:6px">내가 직접 쓴 것</div><div style="color:var(--red)">' + r.typed.map(esc).join('<br>') + '</div>' : '') +
+      (r.edits.length ? '<div class="k" style="margin-top:6px">프롬프트에서 직접 고친 부분</div><div>' + r.edits.map(c => (c.from ? '<del>' + esc(c.from) + '</del> → ' : '추가: ') + '<b style="color:var(--red)">' + esc(c.to || '(삭제)') + '</b>').join('<br>') + '</div>' : '') +
+      '<div class="k" style="margin-top:6px">최종 프롬프트</div><pre>' + esc(r.final) + '</pre></div>'; }).join('');
+  host.innerHTML = h || '<p class="empty">아직 기록이 없습니다. 각 단계에서 [프롬프트 복사]를 누르거나 결과를 붙여넣으면 여기에 남습니다.</p>';
+}
+
+/* 강사 패널 */
+function panelInit(){
+  if (!INSTR) return;
+  const btn = document.createElement('button'); btn.id = 'pbtn'; btn.type = 'button'; btn.textContent = '🧭 현장 판단';
+  const pn = document.createElement('div'); pn.id = 'panel';
+  pn.innerHTML = '<button class="x" type="button">×</button><h3>현장 판단 패널</h3><p class="sub" style="margin:0">강사 화면의 ChatGPT 결과를 붙여넣으면 다음 단계 방향을 알려 줍니다.</p>' +
+    '<div class="ptab"><button type="button" data-t="a" class="on">1단계 결과 → 2단계</button><button type="button" data-t="b">3단계 결과 점검</button></div>' +
+    '<div id="pa"><textarea class="paste" id="pp1" placeholder="1단계 결과 붙여넣기"></textarea><div id="pr1"></div></div>' +
+    '<div id="pb" style="display:none"><textarea class="paste" id="pp3" placeholder="3단계 결과 붙여넣기"></textarea><div id="pr3"></div></div>';
+  document.body.appendChild(btn); document.body.appendChild(pn);
+  btn.addEventListener('click', () => pn.classList.toggle('on'));
+  pn.querySelector('.x').addEventListener('click', () => pn.classList.remove('on'));
+  pn.querySelectorAll('.ptab button').forEach(b => b.addEventListener('click', () => {
+    pn.querySelectorAll('.ptab button').forEach(x => x.classList.toggle('on', x === b));
+    document.getElementById('pa').style.display = b.dataset.t === 'a' ? '' : 'none';
+    document.getElementById('pb').style.display = b.dataset.t === 'b' ? '' : 'none'; }));
+  const pp1 = document.getElementById('pp1'), pp3 = document.getElementById('pp3');
+  pp1.value = S.ws.raw.p1 || ''; pp3.value = S.ws.raw.p3 || '';
+  const draw1 = () => {
+    const c = counts(), r = recommend(), q = (pp1.value.match(/확인\s*필요/g)||[]).length;
+    if (!r) { document.getElementById('pr1').innerHTML = '<p class="empty">표를 찾지 못했습니다. ChatGPT 답변의 복사 아이콘으로 복사해 주세요.</p>'; return; }
+    const kindTxt = {zero:'①이 0건: AI가 지나치게 조심스럽습니다', many:'①이 절반 이상: AI가 너무 쉽게 맡깁니다', even:'고르게 나뉨'}[r.kind];
+    document.getElementById('pr1').innerHTML =
+      '<div class="bars"><div><b>' + c[1] + '</b>① 활용 가능</div><div><b>' + c[2] + '</b>② 사람 판단</div><div><b>' + c[3] + '</b>③ 활용 주의</div><div><b>' + q + '</b>[확인 필요]</div></div>' +
+      '<p><b>' + kindTxt + '</b></p>' +
+      '<div class="reco"><b>2단계 시연 추천</b><br>업무: <b>' + esc(r.task || '(직접 고르기)') + '</b><br>옮길 곳: <b>' + esc(r.to) + '</b><br>이유: <b>' + esc(r.reason) + '</b>' +
+      '<div class="tools"><button class="mini" type="button" id="apply2">2단계에 넣기</button></div></div>' +
+      reflectHTML(pp1.value) + '<div class="say">🎤 ' + esc(r.say) + '</div>' +
+      (q ? '<div class="say">🎤 [확인 필요]가 ' + q + '번 나왔습니다. 모르는 걸 모른다고 표시하게 만든 것이 검증의 시작입니다.</div>' : '<div class="say">🎤 [확인 필요]가 한 번도 없습니다. AI가 우리 회사 사정을 다 아는 것처럼 답했다는 뜻입니다. 그대로 믿어도 될까요?</div>');
+    document.getElementById('apply2').addEventListener('click', () => {
+      if (r.task) { S.sel['p2.task'] = [r.task]; if (!selectedTasks().some(t => norm(t) === norm(r.task))) { S.sel['p1.tasks'] = (S.sel['p1.tasks']||[]).concat(r.task); } }
+      S.sel['p2.to'] = [r.to]; S.sel['p2.reason'] = [r.reason]; S.edit['p2'] = null; save();
+      CFG.steps.forEach(st => { if (st.template) { renderFields(st); renderPreview(st); } }); renderWS(); show('p2'); pn.classList.remove('on'); });
+  };
+  const draw3 = () => {
+    const t = parseTable(pp3.value); const ki = t.head.findIndex(h => /빼고|할\s*수/.test(h));
+    const ks = t.body.map(cells => chkOf(ki >= 0 ? cells[ki] : cells[cells.length-1])).filter(Boolean);
+    const n = {o:0,m:0,x:0}; ks.forEach(k => n[k]++);
+    if (!ks.length) { document.getElementById('pr3').innerHTML = '<p class="empty">\'빼고도 할 수 있는지\' 칸을 찾지 못했습니다.</p>'; return; }
+    let say = n.x ? '✗가 나온 업무는 AI 대신 사람이 하거나 사내 지침을 기다립니다. 어떤 자료 때문인지 함께 봅시다.'
+      : n.m ? '△는 자료를 빼면 일부만 됩니다. 무엇을 빼고 무엇을 사람이 채울지가 우리 팀 규칙이 됩니다.'
+      : '모두 ✓입니다. 결론은 다 조심하자가 아니라 이것만 빼면 쓸 수 있다입니다. 무엇을 빼는지가 우리 팀 규칙입니다.';
+    if (ks.length && n.x === ks.length) say = '모두 ✗입니다. AI가 과하게 경고했을 수 있습니다. 개인정보를 빼고 업무 이름만 넣으면 되는지 다시 물어봅시다.';
+    document.getElementById('pr3').innerHTML = '<div class="bars"><div><b>' + n.o + '</b>✓ 빼고도 가능</div><div><b>' + n.m + '</b>△ 일부 가능</div><div><b>' + n.x + '</b>✗ 어려움</div></div><div class="say">🎤 ' + esc(say) + '</div>';
+  };
+  pp1.addEventListener('input', () => { applyPaste1(pp1.value); const lp = document.getElementById('paste-p1'); if (lp) { lp.value = pp1.value; lp.dispatchEvent(new Event('input')); } else { renderWS(); } draw1(); });
+  pp3.addEventListener('input', () => { applyPaste3(pp3.value); const lp = document.getElementById('paste-p3'); if (lp) { lp.value = pp3.value; lp.dispatchEvent(new Event('input')); } else { renderWS(); } draw3(); });
+  if (pp1.value) draw1(); if (pp3.value) draw3();
+  window.panelSync = (id, v) => { if (id === 'p1') { pp1.value = v; draw1(); } if (id === 'p3') { pp3.value = v; draw3(); } };
+}
+const TEAMEX = {
+  'MD.상품기획': {tasks:['주간 실적 보고 검토','협력사 미팅 자료 검토','편성안.방송 계획 검토','업계 동향.경쟁사 자료 조사'],
+    own:['신규 입점 상품 품평회 결과 정리','협력사 단가 협상 준비','방송 후 상품별 판매 분석'], extra:['협력사 대부분이 중소기업과 농어민이다','제철 상품은 수확 시기에 따라 물량이 크게 바뀐다','방송 편성은 한정되어 있어 상품 선정 경쟁이 크다']},
+  '모바일상품.모바일운영': {tasks:['주간 실적 보고 검토','업계 동향.경쟁사 자료 조사','사내 공지.안내문 작성','고객 불만 대응 방향 결정'],
+    own:['앱 기획전과 원데이특가 상품 구성','앱 푸시 알림 문구 작성','모바일 전용 상품 성과 분석'], extra:['모바일 전용 상품과 방송 상품을 함께 운영한다','앱 첫 화면 자리는 한정되어 있다','고령 고객도 앱으로 주문한다']},
+  '방송기획.제작.공영라방': {tasks:['편성안.방송 계획 검토','회의록 정리와 후속 업무 배분','협력사 미팅 자료 검토','교육.행사 일정 조율'],
+    own:['방송 큐시트와 상품 소개 문구 검수','공영라방 숏폼 아이디어 정리','현장 라이브 촬영 일정 조율'], extra:['방송 심의 기준에 맞는 표현인지 꼭 확인해야 한다','제작 인원이 적어 한 사람이 여러 방송을 맡는다','생방송은 일정 변경이 어렵다']},
+  'CS.CX': {tasks:['고객 불만 대응 방향 결정','회의록 정리와 후속 업무 배분','팀원 1:1 면담 준비','사내 공지.안내문 작성'],
+    own:['상담 응대 스크립트 개정','자주 묻는 질문 답변 정리','민원 유형별 주간 보고'], extra:['주말 방송 뒤 문의가 몰린다','고령 고객이 많아 통화가 길다','고객정보를 다루는 업무가 대부분이다']},
+  '경영기획.재무.전략': {tasks:['경영진 보고 자료 만들기','예산 집행 계획 세우기','팀원 성과 평가 의견 작성','교육.행사 일정 조율'],
+    own:['공공기관 경영평가 자료 준비','이사회 안건 자료 정리','부서별 예산 요청 검토'], extra:['공공기관이라 공시와 평가 일정에 맞춰야 한다','숫자는 공식 자료와 한 자리도 틀리면 안 된다','여러 부서 자료를 모아 정리한다']},
+  '마케팅.홍보.브랜드': {tasks:['업계 동향.경쟁사 자료 조사','사내 공지.안내문 작성','예산 집행 계획 세우기','경영진 보고 자료 만들기'],
+    own:['보도자료 초안 검토','SNS 홍보 문구 작성','기획전 프로모션 성과 정리'], extra:['공공기관이라 외부에 나가는 문구는 사실 확인이 엄격하다','AI 모델을 홍보에 쓰고 있다','정부 판로 행사와 일정을 맞춰야 한다']},
+  '방송심의': {tasks:['편성안.방송 계획 검토','협력사 미팅 자료 검토','사내 공지.안내문 작성','업계 동향.경쟁사 자료 조사'],
+    own:['방송 전 상품 설명 문구 사전심의','심의 지적 사례 정리','협력사 표현 수정 안내'], extra:['건강식품과 화장품은 효능 표현 기준이 까다롭다','방송 직전에 문구가 바뀌는 일이 많다','AI 모델이 나오면 가상인물 표시를 확인해야 한다']},
+  'IT.AX': {tasks:['업계 동향.경쟁사 자료 조사','경영진 보고 자료 만들기','교육.행사 일정 조율','사내 공지.안내문 작성'],
+    own:['부서별 AI 활용 요청 검토','시스템 장애 보고서 작성','AI 도구 사용 안내문 작성'], extra:['시스템 변경은 보안 검토를 거쳐야 한다','부서마다 AI를 쓰고 싶은 업무가 다르다','개인정보가 들어간 시스템이 많다']},
+  '디자인.영상': {tasks:['편성안.방송 계획 검토','협력사 미팅 자료 검토','회의록 정리와 후속 업무 배분','교육.행사 일정 조율'],
+    own:['방송 그래픽과 숏폼 영상 시안 검토','상세페이지 디자인 수정 요청 정리','영상 제작 일정표 관리'], extra:['방송 일정에 맞춰 짧은 시간에 시안을 여러 번 고친다','협력사가 보내는 이미지 품질이 제각각이다','AI 이미지는 저작권과 표시 기준을 확인해야 한다']},
+  'ESG.정책.대외협력': {tasks:['업계 동향.경쟁사 자료 조사','경영진 보고 자료 만들기','협력사 미팅 자료 검토','교육.행사 일정 조율'],
+    own:['정부 정책 변화와 국회 요구 자료 정리','외부 기관 협약 자료 준비','ESG 경영 실적 정리'], extra:['외부 기관에 내는 자료는 숫자 하나도 공식 자료와 맞아야 한다','정책 발표 시점에 맞춰 급하게 자료를 낸다','여러 부서의 실적을 모아야 한다']},
+  '인사.교육.총무안전': {tasks:['교육.행사 일정 조율','사내 공지.안내문 작성','팀원 1:1 면담 준비','예산 집행 계획 세우기'],
+    own:['사내 교육 만족도 결과 정리','채용 공고 문구 작성','안전 점검 결과 보고'], extra:['인사 정보가 많아 다루는 자료마다 보안 등급이 다르다','교육은 근무 일정과 겹치지 않게 잡아야 한다','현장 촬영이 늘어 안전 관리가 중요하다']},
+  '품질.물류': {tasks:['협력사 미팅 자료 검토','고객 불만 대응 방향 결정','주간 실적 보고 검토','회의록 정리와 후속 업무 배분'],
+    own:['상품 품질검사 결과 보고','반품 원인 분석','협력사 품질 교육 자료 준비'], extra:['식품과 농수산물이 많아 안전 기준을 꼭 지켜야 한다','명절에는 물량과 반품이 몰린다','처음 입점한 소상공인은 품질 기준을 잘 모른다']},
+  '전사.본부 총괄': {tasks:['경영진 보고 자료 만들기','주간 실적 보고 검토','회의록 정리와 후속 업무 배분','팀원 성과 평가 의견 작성'],
+    own:['여러 팀의 실적과 이슈를 한 장으로 정리','본부 회의 안건 정하기','부서 간 업무 조율'], extra:['팀마다 보고 양식과 숫자 기준이 다르다','결정할 일이 여러 팀에 걸쳐 있다','외부 기관과 경영진 보고가 잦다']},
+  '그 밖의 부서': {tasks:['회의록 정리와 후속 업무 배분','사내 공지.안내문 작성','팀원 1:1 면담 준비','교육.행사 일정 조율'],
+    own:['팀 업무 매뉴얼 정리','주간 업무 보고서 작성','다른 부서 요청 자료 준비'], extra:['담당자가 바뀌면 인수인계가 어렵다','다른 부서와 함께 하는 일이 많다','반복되는 서류 작업이 많다']},
+};
+function teamAuto(){
+  const team = (S.sel['p1.team']||[])[0]; const ex = TEAMEX[team]; if (!ex) return;
+  const pex = TEAMEX[S.autoTeam]; if (pex && S.autoTeam !== team) ['own','extra'].forEach(k => { if (pex[k].includes(S.txt['p1.' + k])) S.txt['p1.' + k] = ''; });
+  if (S.autoTeam === team) return;
+  S.autoTeam = team;
+  { S.sel['p1.tasks'] = ex.tasks.slice(); S.autoTasks = ex.tasks.slice(); S.edit['p1'] = null; save();
+    const st = CFG.steps.find(x => x.id === 'p1'); renderFields(st); renderPreview(st);
+    CFG.steps.forEach(x => { if (x !== st && x.fields.some(f => f.from && f.from.startsWith('p1.'))) { renderFields(x); renderPreview(x); } }); }
+}
+function addExamples(){
+  if (!INSTR) return;
+  const st = CFG.steps.find(x => x.id === 'p1'); const host = document.getElementById('fields-p1'); if (!host) return;
+  const team = (S.sel['p1.team']||[])[0]; const ex = TEAMEX[team];
+  ['own','extra'].forEach(k => {
+    const i = st.fields.findIndex(f => f.key === k); const box = host.children[i]; if (!box) return;
+    const inp = box.querySelector('input'); const old = box.querySelector('.exrow'); if (old) old.remove();
+    if (!ex) return; if (inp) inp.placeholder = '예: ' + ex[k][0];
+    const row = document.createElement('div'); row.className = 'exrow'; row.innerHTML = '<span>예시</span>';
+    ex[k].forEach(t => { const b = document.createElement('button'); b.type = 'button'; b.className = 'exchip'; b.textContent = t;
+      b.addEventListener('click', () => { S.txt['p1.' + k] = t; S.edit['p1'] = null; save(); if (inp) inp.value = t; renderPreview(st); renderWS();
+        CFG.steps.forEach(x => { if (x !== st && x.fields.some(f => (f.fromText||[]).includes('p1.' + k))) { renderFields(x); renderPreview(x); } }); });
+      row.appendChild(b); });
+    box.appendChild(row);
+  });
+}
+const P4PRESETS = [
+  {name:'회의 3분 안내', form:'팀 회의에서 말할 3분 안내', rules:['AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다','③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다'], add:'처음 한 달은 결과물을 나와 같이 본다'},
+  {name:'메신저 공지', form:'메신저 공지 한 장', rules:['개인정보와 고객정보는 어떤 경우에도 넣지 않는다','기관 계정(ChatGPT Edu)만 쓴다','AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다'], add:''},
+  {name:'팀 내부 지침 (꼼꼼하게)', form:'팀 내부 지침 한 장 (표 포함)', rules:['AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다','AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다','개인정보와 고객정보는 어떤 경우에도 넣지 않는다','숫자와 출처는 원문과 대조한 뒤 쓴다','외부로 나가는 문서는 직책자가 확인한 뒤 보낸다'], add:''},
+  {name:'신입 팀원 안내', form:'', formx:'신입 팀원 안내용 한 쪽', rules:['③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다','개인정보와 고객정보는 어떤 경우에도 넣지 않는다','AI 결과만으로 사람을 평가하지 않는다'], add:'모르면 혼자 판단하지 말고 먼저 묻는다'},
+];
+function p4PresetInit(){
+  if (!INSTR) return; const host = document.getElementById('fields-p4'); if (!host) return;
+  const box = document.createElement('div'); box.className = 'tnote';
+  box.innerHTML = '<b>강사 메모</b>시연용 예시 불러오기 (형식, 원칙, 덧붙일 말이 한 번에 채워집니다) ';
+  P4PRESETS.forEach(p => { const b = document.createElement('button'); b.type = 'button'; b.className = 'mini'; b.style.margin = '4px'; b.textContent = p.name;
+    b.addEventListener('click', () => { S.sel['p4.form'] = p.form ? [p.form] : []; S.txt['p4.formx'] = p.formx || ''; S.sel['p4.rules'] = p.rules.slice(); S.txt['p4.add'] = p.add; S.edit['p4'] = null; save();
+      const st = CFG.steps.find(x => x.id === 'p4'); renderFields(st); renderPreview(st); });
+    box.appendChild(b); });
+  host.parentNode.insertBefore(box, host);
+}
+function bindBoxCopy(){ document.querySelectorAll('.box .copy').forEach(b => b.addEventListener('click', e => copyText(b.parentElement.querySelector('pre').innerText, e.currentTarget))); }
+function extraInit(){ sortTasks(); bindBoxCopy(); addExamples(); p4PresetInit(); bindPaste(); renderWS(); panelInit(); panelFollow(); window.addEventListener('hashchange', () => { show(); panelFollow(); }); const _sh = show; show = function(id){ _sh(id); panelFollow(); }; }
+
+init(); extraInit(); show();
+</script>
+</body>
+</html>
