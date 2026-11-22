@@ -123,9 +123,10 @@
   .stat .n{font-size:30px;font-weight:800;color:var(--accent);letter-spacing:-.5px}
   .stat .l{font-size:14px;color:var(--dim);margin-top:4px;line-height:1.5}
   .src{font-size:12.5px;color:var(--dim);margin:6px 0 18px}
-  .flow5{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+  .flow5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
   .flow5 div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;line-height:1.5}
   .flow5 div b{display:block;color:var(--accent);font-size:15.5px;margin-bottom:4px}
+  .flow5 div small{display:block;color:var(--dim);font-size:13px;margin-top:4px}
   .flow5 div.today{border:2px solid var(--red)}
   .flow5 div.today b{color:var(--red)}
   @media(max-width:720px){.flow5{grid-template-columns:1fr 1fr}}
@@ -143,6 +144,9 @@
   .split div{flex:1;border:2px solid var(--accent2);border-radius:8px;height:92px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13.5px;background:#fff}
   .split div:last-child{border-color:var(--teal)}
   .paste{width:100%;min-height:110px;font:inherit;font-size:14px;border:1.5px dashed var(--accent2);border-radius:8px;padding:10px;background:#fbfaff}
+  .subfield{margin-left:18px;padding-left:14px;border-left:3px solid var(--line)}
+  .exrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:7px;font-size:13px}.exrow span{color:var(--dim);font-weight:700;margin-right:2px}
+  .exchip{border:1px dashed var(--line);background:#fafafa;border-radius:8px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink)}.exchip:hover{border-color:var(--accent2,#6e5fb0)}
   .pastebox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0}
   .pastebox h4{margin:0 0 6px;font-size:15.5px;color:var(--accent)}
   .ok{color:var(--teal);font-weight:700;font-size:14px}
@@ -187,13 +191,7 @@
 <p class="sub">판단에서 실행까지, 직책자의 AI 5일 | 첫째 날</p>
 <div class="big">AI가 초안을 만들고, 직책자가 검토하고 판단하고, 팀이 실행합니다.</div>
 <h3>5일 동안 만드는 것</h3>
-<div class="flow5">
-<div class="today"><b>DAY 1 (오늘)</b>우리 팀 AI 업무분류표<br>무엇을 AI에 맡길까</div>
-<div><b>DAY 2</b>AI 의사결정 1PAGE<br>AI와 함께 판단하기</div>
-<div><b>DAY 3~4</b>데이터 대시보드<br>숫자를 보는 눈</div>
-<div><b>DAY 5</b>30일 Action Plan<br>대화와 실행으로</div>
-</div>
-
+<div class="flow5"><div class="today"><b>1일차 (오늘)</b>AI 관점<small>우리 팀 AI 업무분류표</small></div><div><b>2일차</b>의사결정<small>AI 의사결정 1PAGE</small></div><div><b>3일차</b>대시보드 ①</div><div><b>4일차</b>대시보드 ②</div><div><b>5일차</b>코칭.피드백<small>30일 Action Plan</small></div></div>
 <div class="grid">
 <div class="cardbox"><b>도구</b>기관이 준 <b>ChatGPT Edu</b> 계정 (개인 계정 아님)</div>
 <div class="cardbox"><b>오늘의 결과물</b>우리 팀 AI 업무분류표 (이 페이지의 [활동지]에서 표시하고 인쇄)</div>
@@ -251,7 +249,14 @@
     <button class="bigcopy" type="button">📋 프롬프트 복사</button>
   </div><div class="pastebox"><h4>📥 AI가 만든 우리 팀 AI 사용 기준 붙여넣기</h4><p class="sub" style="margin:0 0 6px">붙여넣으면 [내 기록]에 분류표와 함께 남습니다.</p>
 <textarea class="paste" id="paste-p4" placeholder="ChatGPT 답변 아래 복사 아이콘을 누른 뒤 여기에 Ctrl + V"></textarea>
-<div id="pastemsg-p4"></div></div><div class="note">AI가 만든 기준도 초안입니다. 팀원에게 보내기 전에 <b>내가</b> 읽고 고칩니다. 이 기준은 DAY 5 Action Plan에서 다시 씁니다.</div><div class="pager"><a class="btn ghost" href="#p3">← 실습 3 입력 점검</a><a class="btn" href="#record">내 기록 →</a></div></section></div><div class="page" id="sheet"><section><h2>활동지 | 우리 팀 AI 업무분류표</h2>
+<div id="pastemsg-p4"></div></div><div class="note">AI가 만든 기준도 초안입니다. 팀원에게 보내기 전에 <b>내가</b> 읽고 고칩니다. 이 기준은 DAY 5 Action Plan에서 다시 씁니다.</div>
+<h3>⭐ 워드 파일로 저장하기 <small>고쳤든 안 고쳤든 저장할 수 있습니다</small></h3>
+<div class="box"><button class="copy" type="button">복사</button><pre>위 '우리 팀 AI 사용 기준'을 워드 파일(.docx)로 내려받을 수 있게 바로 만들어줘.
+- 문서 창에서 내가 고친 부분이 있으면 고친 그대로, 고치지 않았으면 지금 내용 그대로 쓴다
+- 다시 묻지 말고 바로 파일을 만든다
+- 내용은 바꾸지 않는다
+- A4 한두 장, 팀원에게 나눠 줄 수 있는 문서 모양으로</pre></div>
+<div class="note">파일을 만드는 데 시간이 조금 걸릴 수 있습니다. 고칠 생각이라면 고친 다음에 저장해야 고친 내용이 파일에 들어갑니다.</div><div class="pager"><a class="btn ghost" href="#p3">← 실습 3 입력 점검</a><a class="btn" href="#record">내 기록 →</a></div></section></div><div class="page" id="sheet"><section><h2>활동지 | 우리 팀 AI 업무분류표</h2>
 <p class="sub">칸을 눌러 표시합니다. 다시 누르면 지워집니다. 인쇄하면 종이 활동지가 됩니다.</p>
 <div class="grid"><div class="cardbox"><b>① AI 활용 가능</b>AI에게 맡기고 결과만 확인</div><div class="cardbox"><b>② 사람 판단 중요</b>AI를 쓰되 판단은 내가</div><div class="cardbox"><b>③ AI 활용 주의</b>쓰지 않거나 아주 조심해서</div></div>
 <div id="ws-all"></div>
@@ -266,7 +271,7 @@
 </div>
 <footer>AI 모닝클래스 | 판단에서 실행까지, 직책자의 AI 5일<br>※ 해당 문서는 배포 및 공유를 제한합니다</footer>
 <script>
-const CFG = {"day": "d1v2", "steps": [{"id": "p1", "name": "1 분류 맡기기", "fields": [{"key": "team", "type": "radio", "label": "① 우리 팀", "options": [{"v": "MD·상품기획", "label": "MD·상품기획"}, {"v": "방송기획·제작", "label": "방송기획·제작"}, {"v": "모바일·공영라방", "label": "모바일·공영라방"}, {"v": "고객.CS", "label": "고객.CS"}, {"v": "마케팅·홍보", "label": "마케팅·홍보"}, {"v": "경영지원·기획", "label": "경영지원·기획"}, {"v": "품질·물류", "label": "품질·물류"}, {"v": "그 밖의 팀", "label": "그 밖의 팀"}], "empty": "[팀 선택 전]"}, {"key": "teamx", "type": "text", "label": "팀 이름 직접 쓰기", "hint": "선택", "placeholder": "예: 공영라방운영팀"}, {"key": "tasks", "type": "check", "label": "② 내 업무와 비슷한 카드", "hint": "3~6개", "options": [{"v": "주간 실적 보고 검토", "label": "주간 실적 보고 검토"}, {"v": "회의록 정리와 후속 업무 배분", "label": "회의록 정리와 후속 업무 배분"}, {"v": "팀원 1:1 면담 준비", "label": "팀원 1:1 면담 준비"}, {"v": "협력사 미팅 자료 검토", "label": "협력사 미팅 자료 검토"}, {"v": "편성안·방송 계획 검토", "label": "편성안·방송 계획 검토"}, {"v": "고객 불만 대응 방향 결정", "label": "고객 불만 대응 방향 결정"}, {"v": "예산 집행 계획 세우기", "label": "예산 집행 계획 세우기"}, {"v": "경영진 보고 자료 만들기", "label": "경영진 보고 자료 만들기"}, {"v": "사내 공지·안내문 작성", "label": "사내 공지·안내문 작성"}, {"v": "업계 동향·경쟁사 자료 조사", "label": "업계 동향·경쟁사 자료 조사"}, {"v": "팀원 성과 평가 의견 작성", "label": "팀원 성과 평가 의견 작성"}, {"v": "교육·행사 일정 조율", "label": "교육·행사 일정 조율"}], "max": 6, "join": "lines", "empty": "[업무 카드 선택 전]"}, {"key": "own", "type": "text", "label": "③ 카드에 없는 내 업무", "hint": "선택. 업무 이름만", "placeholder": "예: 협력사 품질 이슈 보고"}, {"key": "extra", "type": "text", "label": "④ AI가 알면 좋을 우리 팀 사정", "hint": "선택", "placeholder": "예: 협력사 대부분이 소규모 농가다"}], "template": "나는 공영홈쇼핑 {team}[[ ({teamx})]] 직책자다.\n아래는 내 업무 목록이다.\n{tasks}[[\n- {own}]]\n\n각 업무를 아래 세 가지 중 하나로 분류해서 표로 정리해줘.\n① AI 활용 가능\n② AI를 쓰되 사람 판단이 중요\n③ AI 활용 주의\n표의 열: 업무 | 분류 | 이유 한 줄 | AI를 쓸 때 주의할 점\n업무는 위 목록 순서 그대로 써줘.\n[[참고할 우리 팀 사정: {extra}\n]]우리 회사 내부 사정은 모를 테니 확신이 없는 부분은 [확인 필요]라고 표시해줘."}, {"id": "p2", "name": "2 고치기", "fields": [{"key": "task", "type": "radio", "label": "① 동의하지 않는 업무 1개", "from": "p1.tasks", "fromText": ["p1.own"], "empty": "[업무 선택 전]"}, {"key": "to", "type": "radio", "label": "② 어디로 옮길까요?", "options": [{"v": "AI 활용 가능", "label": "AI 활용 가능"}, {"v": "AI를 쓰되 사람 판단이 중요", "label": "AI를 쓰되 사람 판단이 중요"}, {"v": "AI 활용 주의", "label": "AI 활용 주의"}], "empty": "[분류 선택 전]"}, {"key": "reason", "type": "radio", "label": "③ 이유", "wide": true, "empty": "[이유 선택 전]", "options": [{"v": "사람 사이의 관계가 걸려 있다", "label": "사람 사이의 관계가 걸려 있다"}, {"v": "우리 회사 내부 사정을 알아야 판단할 수 있다", "label": "우리 회사 내부 사정을 알아야 판단할 수 있다"}, {"v": "결과에 내가 책임을 진다", "label": "결과에 내가 책임을 진다"}, {"v": "정해진 형식이 있어 AI에게 맡겨도 된다", "label": "정해진 형식이 있어 AI에게 맡겨도 된다"}, {"v": "개인정보나 내부자료가 들어간다", "label": "개인정보나 내부자료가 들어간다"}]}, {"key": "reasonx", "type": "text", "label": "④ 이유를 내 말로 한 줄", "hint": "선택", "placeholder": "예: 협력사와 오래 쌓은 관계라 표현 하나가 중요하다"}], "template": "위 표에서 '{task}' 업무의 분류를 '{to}'(으)로 바꿔줘.\n이유: {reason}[[ / {reasonx}]]\n이 이유를 반영해서 표 전체를 다시 정리하고 같은 이유로 함께 바꿔야 할 업무가 있으면 알려줘."}, {"id": "p3", "name": "3 입력 점검", "fields": [{"key": "types", "type": "check", "label": "① 우리 팀에서 조심할 자료", "hint": "여러 개 가능", "default": ["개인정보", "고객정보"], "join": "·", "empty": "[자료 선택 전]", "options": [{"v": "개인정보", "label": "개인정보"}, {"v": "고객정보", "label": "고객정보"}, {"v": "협력사 계약과 단가", "label": "협력사 계약과 단가"}, {"v": "미공개 실적", "label": "미공개 실적"}, {"v": "인사 정보", "label": "인사 정보"}, {"v": "방송 심의 관련 자료", "label": "방송 심의 관련 자료"}]}, {"key": "typesx", "type": "text", "label": "② 그 밖에 조심할 자료", "hint": "선택", "placeholder": "예: 입점 심사 서류"}], "template": "위 표의 업무마다 AI에 넣어도 되는 자료와 빼야 하는 자료를 나눠줘.\n우리 팀에서 특히 조심할 자료: {types}[[·{typesx}]]\n표의 열: 업무 | 넣어도 되는 자료 | 빼야 하는 자료 | 빼고도 할 수 있는지\n업무는 처음 표의 순서 그대로 써줘.\n'빼고도 할 수 있는지' 칸은 맨 앞에 ✓(가능) △(일부 가능) ✗(어려움) 중 하나를 먼저 쓰고 뒤에 이유를 한 줄로 써줘.\n확신이 없는 부분은 [확인 필요]라고 표시해줘."}, {"id": "p4", "name": "4 팀 기준", "fields": [{"key": "final", "type": "ws", "label": "활동지 내 최종 분류"}, {"key": "form", "type": "radio", "label": "① 팀원에게 어떻게 전할까요?", "orText": "p4.formx", "empty": "[형식 선택 전]", "options": [{"v": "팀 회의에서 말할 3분 안내", "label": "팀 회의에서 말할 3분 안내"}, {"v": "메신저 공지 한 장", "label": "메신저 공지 한 장"}, {"v": "팀 내부 지침 한 장 (표 포함)", "label": "팀 내부 지침 한 장 (표 포함)"}]}, {"key": "formx", "type": "text", "label": "형식 직접 쓰기", "hint": "선택. 쓰면 위에서 고른 것 대신 들어갑니다", "placeholder": "예: 신입 팀원 안내용 한 쪽"}, {"key": "rules", "type": "check", "label": "② 꼭 넣을 원칙", "hint": "여러 개 가능", "join": "lines", "default": ["AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다"], "options": [{"v": "AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다", "label": "AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다"}, {"v": "AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다", "label": "AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다"}, {"v": "③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다", "label": "③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다"}, {"v": "개인정보와 고객정보는 어떤 경우에도 넣지 않는다", "label": "개인정보와 고객정보는 어떤 경우에도 넣지 않는다"}, {"v": "기관 계정(ChatGPT Edu)만 쓴다", "label": "기관 계정(ChatGPT Edu)만 쓴다"}, {"v": "숫자와 출처는 원문과 대조한 뒤 쓴다", "label": "숫자와 출처는 원문과 대조한 뒤 쓴다"}, {"v": "외부로 나가는 문서는 직책자가 확인한 뒤 보낸다", "label": "외부로 나가는 문서는 직책자가 확인한 뒤 보낸다"}, {"v": "AI 결과만으로 사람을 평가하지 않는다", "label": "AI 결과만으로 사람을 평가하지 않는다"}]}, {"key": "add", "type": "text", "label": "③ 덧붙일 말", "hint": "선택", "placeholder": "예: 처음 한 달은 결과물을 나와 같이 본다"}], "template": "지금까지 정리한 내용을 바탕으로 팀원에게 전할 '우리 팀 AI 사용 기준'을 만들어줘.\n\n내가 최종으로 정한 업무 분류 (AI 분류와 다르면 이것을 따른다):\n{final}\n\n전할 형식: {form}\n꼭 넣을 원칙:\n{rules}[[\n덧붙일 말: {add}]]\n\n구성:\n1. ① 업무: AI로 먼저 하고 담당자가 결과를 확인한다\n2. ② 업무: AI 초안 뒤 직책자가 판단한다\n3. ③ 업무: 빼야 할 자료와 쓰는 방법\n업무 이름은 위 목록 그대로 쓰고 목록에 없는 내용은 만들지 말고 [확인 필요]로 표시해줘."}]};
+const CFG = {"day": "d1v2", "steps": [{"id": "p1", "name": "1 분류 맡기기", "fields": [{"key": "team", "type": "radio", "label": "① 우리 팀", "options": [{"v": "MD.상품기획", "label": "MD.상품기획", "desc": "상품총괄팀, 가공식품팀, 생활팀, 패션팀, 건강뷰티팀, 문화팀"}, {"v": "모바일상품.모바일운영", "label": "모바일상품.모바일운영", "desc": "모바일상품팀, 모바일운영팀"}, {"v": "방송기획.제작.공영라방", "label": "방송기획.제작.공영라방", "desc": "방송기획팀, 방송제작실, 방송제작3팀, 공영라방팀, 방송기술팀"}, {"v": "CS.CX", "label": "CS.CX", "desc": "고객만족팀, CX팀"}, {"v": "경영기획.재무.전략", "label": "경영기획.재무.전략", "desc": "기획조정팀, 경영관리팀, 경영지원실, 채널전략팀"}, {"v": "마케팅.홍보.브랜드", "label": "마케팅.홍보.브랜드", "desc": "마케팅팀, 홍보브랜드팀"}, {"v": "방송심의", "label": "방송심의", "desc": "방송심의팀"}, {"v": "IT.AX", "label": "IT.AX", "desc": "AX추진단, 정보전략팀, 정보운영팀"}, {"v": "디자인.영상", "label": "디자인.영상", "desc": "영상아트팀, 영상제작팀"}, {"v": "ESG.정책.대외협력", "label": "ESG.정책.대외협력", "desc": "ESG경영팀, 대외협력팀, 정책개발팀, T-커머스 사업 총괄 TF팀"}, {"v": "인사.교육.총무안전", "label": "인사.교육.총무안전", "desc": "인재육성팀, 총무안전팀"}, {"v": "품질.물류", "label": "품질.물류", "desc": "품질혁신팀, 물류혁신팀"}, {"v": "전사.본부 총괄", "label": "전사.본부 총괄", "desc": "대표이사, 본부장, 실장 (여러 팀 총괄)"}, {"v": "그 밖의 부서", "label": "그 밖의 부서", "desc": "목록에 없으면 부서 이름을 직접 씁니다"}], "empty": "[팀 선택 전]"}, {"key": "teamx", "type": "text", "label": "우리 부서 이름", "hint": "선택", "placeholder": "예: 고객만족팀"}, {"key": "tasks", "type": "check", "label": "② 내 업무와 비슷한 카드", "hint": "3~6개. 부서를 고르면 비슷한 카드가 미리 골라집니다. 내 업무에 맞게 바꾸세요", "options": [{"v": "주간 실적 보고 검토", "label": "주간 실적 보고 검토"}, {"v": "회의록 정리와 후속 업무 배분", "label": "회의록 정리와 후속 업무 배분"}, {"v": "팀원 1:1 면담 준비", "label": "팀원 1:1 면담 준비"}, {"v": "협력사 미팅 자료 검토", "label": "협력사 미팅 자료 검토"}, {"v": "편성안.방송 계획 검토", "label": "편성안.방송 계획 검토"}, {"v": "고객 불만 대응 방향 결정", "label": "고객 불만 대응 방향 결정"}, {"v": "예산 집행 계획 세우기", "label": "예산 집행 계획 세우기"}, {"v": "경영진 보고 자료 만들기", "label": "경영진 보고 자료 만들기"}, {"v": "사내 공지.안내문 작성", "label": "사내 공지.안내문 작성"}, {"v": "업계 동향.경쟁사 자료 조사", "label": "업계 동향.경쟁사 자료 조사"}, {"v": "팀원 성과 평가 의견 작성", "label": "팀원 성과 평가 의견 작성"}, {"v": "교육.행사 일정 조율", "label": "교육.행사 일정 조율"}], "max": 6, "join": "lines", "empty": "[업무 카드 선택 전]"}, {"key": "own", "type": "text", "label": "③ 카드에 없는 내 업무", "hint": "선택. 업무 이름만", "placeholder": "예: 협력사 품질 이슈 보고"}, {"key": "extra", "type": "text", "label": "④ AI가 알면 좋을 우리 팀 사정", "hint": "선택", "placeholder": "예: 협력사 대부분이 소규모 농가다"}], "template": "나는 공영홈쇼핑 {team}[[ ({teamx})]] 직책자다.\n아래는 내 업무 목록이다.\n{tasks}[[\n- {own}]]\n\n각 업무를 아래 세 가지 중 하나로 분류해서 표로 정리해줘.\n① AI 활용 가능\n② AI를 쓰되 사람 판단이 중요\n③ AI 활용 주의\n표의 열: 업무 | 분류 | 이유 한 줄 | AI를 쓸 때 주의할 점\n업무는 위 목록 순서 그대로 써줘.\n[[참고할 우리 팀 사정: {extra}\n]]우리 회사 내부 사정은 모를 테니 확신이 없는 부분은 [확인 필요]라고 표시해줘."}, {"id": "p2", "name": "2 고치기", "fields": [{"key": "task", "type": "radio", "label": "① 동의하지 않는 업무 1개", "from": "p1.tasks", "fromText": ["p1.own"], "empty": "[업무 선택 전]"}, {"key": "to", "type": "radio", "label": "② 어디로 옮길까요?", "options": [{"v": "AI 활용 가능", "label": "AI 활용 가능"}, {"v": "AI를 쓰되 사람 판단이 중요", "label": "AI를 쓰되 사람 판단이 중요"}, {"v": "AI 활용 주의", "label": "AI 활용 주의"}], "empty": "[분류 선택 전]"}, {"key": "reason", "type": "radio", "label": "③ 이유", "wide": true, "empty": "[이유 선택 전]", "options": [{"v": "사람 사이의 관계가 걸려 있다", "label": "사람 사이의 관계가 걸려 있다"}, {"v": "우리 회사 내부 사정을 알아야 판단할 수 있다", "label": "우리 회사 내부 사정을 알아야 판단할 수 있다"}, {"v": "결과에 내가 책임을 진다", "label": "결과에 내가 책임을 진다"}, {"v": "정해진 형식이 있어 AI에게 맡겨도 된다", "label": "정해진 형식이 있어 AI에게 맡겨도 된다"}, {"v": "개인정보나 내부자료가 들어간다", "label": "개인정보나 내부자료가 들어간다"}]}, {"key": "reasonx", "type": "text", "label": "④ 이유를 내 말로 한 줄", "hint": "선택", "placeholder": "예: 협력사와 오래 쌓은 관계라 표현 하나가 중요하다"}], "template": "위 표에서 '{task}' 업무의 분류를 '{to}'(으)로 바꿔줘.\n이유: {reason}[[ / {reasonx}]]\n이 이유를 반영해서 표 전체를 다시 정리하고 같은 이유로 함께 바꿔야 할 업무가 있으면 알려줘."}, {"id": "p3", "name": "3 입력 점검", "fields": [{"key": "types", "type": "check", "label": "① 우리 팀에서 조심할 자료", "hint": "여러 개 가능", "default": ["개인정보", "고객정보"], "join": ", ", "empty": "[자료 선택 전]", "options": [{"v": "개인정보", "label": "개인정보"}, {"v": "고객정보", "label": "고객정보"}, {"v": "협력사 계약과 단가", "label": "협력사 계약과 단가"}, {"v": "미공개 실적", "label": "미공개 실적"}, {"v": "인사 정보", "label": "인사 정보"}, {"v": "방송 심의 관련 자료", "label": "방송 심의 관련 자료"}]}, {"key": "typesx", "type": "text", "label": "② 그 밖에 조심할 자료", "hint": "선택", "placeholder": "예: 입점 심사 서류"}], "template": "위 표의 업무마다 AI에 넣어도 되는 자료와 빼야 하는 자료를 나눠줘.\n우리 팀에서 특히 조심할 자료: {types}[[, {typesx}]]\n표의 열: 업무 | 넣어도 되는 자료 | 빼야 하는 자료 | 빼고도 할 수 있는지\n업무는 처음 표의 순서 그대로 써줘.\n'빼고도 할 수 있는지' 칸은 맨 앞에 ✓(가능) △(일부 가능) ✗(어려움) 중 하나를 먼저 쓰고 뒤에 이유를 한 줄로 써줘.\n확신이 없는 부분은 [확인 필요]라고 표시해줘."}, {"id": "p4", "name": "4 팀 기준", "fields": [{"key": "final", "type": "ws", "label": "활동지 내 최종 분류"}, {"key": "form", "type": "radio", "label": "① 팀원에게 어떻게 전할까요?", "orText": "p4.formx", "empty": "[형식 선택 전]", "options": [{"v": "팀 회의에서 말할 3분 안내", "label": "팀 회의에서 말할 3분 안내"}, {"v": "메신저 공지 한 장", "label": "메신저 공지 한 장"}, {"v": "팀 내부 지침 한 장 (표 포함)", "label": "팀 내부 지침 한 장 (표 포함)"}]}, {"key": "formx", "type": "text", "label": "형식 직접 쓰기", "hint": "선택. 쓰면 위에서 고른 것 대신 들어갑니다", "placeholder": "예: 신입 팀원 안내용 한 쪽"}, {"key": "rules", "type": "check", "label": "② 꼭 넣을 원칙", "hint": "여러 개 가능", "join": "lines", "default": ["AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다"], "options": [{"v": "AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다", "label": "AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다"}, {"v": "AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다", "label": "AI를 쓴 결과물은 보고할 때 AI를 썼다고 밝힌다"}, {"v": "③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다", "label": "③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다"}, {"v": "개인정보와 고객정보는 어떤 경우에도 넣지 않는다", "label": "개인정보와 고객정보는 어떤 경우에도 넣지 않는다"}, {"v": "기관 계정(ChatGPT Edu)만 쓴다", "label": "기관 계정(ChatGPT Edu)만 쓴다"}, {"v": "숫자와 출처는 원문과 대조한 뒤 쓴다", "label": "숫자와 출처는 원문과 대조한 뒤 쓴다"}, {"v": "외부로 나가는 문서는 직책자가 확인한 뒤 보낸다", "label": "외부로 나가는 문서는 직책자가 확인한 뒤 보낸다"}, {"v": "AI 결과만으로 사람을 평가하지 않는다", "label": "AI 결과만으로 사람을 평가하지 않는다"}]}, {"key": "add", "type": "text", "label": "③ 덧붙일 말", "hint": "선택", "placeholder": "예: 처음 한 달은 결과물을 나와 같이 본다"}], "template": "지금까지 정리한 내용을 바탕으로 팀원에게 전할 '우리 팀 AI 사용 기준'을 만들어줘.\n\n내가 최종으로 정한 업무 분류 (AI 분류와 다르면 이것을 따른다):\n{final}\n\n전할 형식: {form}\n꼭 넣을 원칙:\n{rules}[[\n덧붙일 말: {add}]]\n\n구성:\n1. ① 업무: AI로 먼저 하고 담당자가 결과를 확인한다\n2. ② 업무: AI 초안 뒤 직책자가 판단한다\n3. ③ 업무: 빼야 할 자료와 쓰는 방법\n업무 이름은 위 목록 그대로 쓰고 목록에 없는 내용은 만들지 말고 [확인 필요]로 표시해줘."}]};
 const KEY = 'aiclass_leader_' + CFG.day;
 let S = {sel:{}, txt:{}, edit:{}, rec:{}};
 try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) {}
@@ -474,9 +479,9 @@ const INSTR = false;
 if (!S.ws) S.ws = {rows:[], raw:{}};
 const CN = ['','①','②','③'];
 
-function norm(s){ return String(s||'').replace(/[\s*`]/g,'').replace(/\(.*?\)/g,''); }
+function norm(s){ return String(s||'').replace(/\(.*?\)/g,'').replace(/[\s*`.,·ㆍ•‧∙\/\-_:;'"“”‘’!?~]/g,'').toLowerCase(); }
 function parseTable(text){
-  const lines = String(text||'').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const lines = String(text||'').replace(/<br\s*\/?>/gi, ' / ').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   let rows = [];
   lines.forEach(l => {
     let cells = null;
@@ -505,28 +510,38 @@ function selectedTasks(){
   const opts = CFG.steps[0].fields.find(f => f.key === 'tasks').options;
   const a = (S.sel['p1.tasks']||[]).slice().sort((x, y) => opts.findIndex(o => o.v === x) - opts.findIndex(o => o.v === y)); const own = (S.txt['p1.own']||'').trim(); if (own) a.push(own); return a;
 }
-function findRow(name){ const n = norm(name); return S.ws.rows.find(r => { const m = norm(r.task); return m && n && (m===n || m.includes(n) || n.includes(m)); }); }
+function findRow(name){ const n = norm(name); if (!n) return null;
+  return S.ws.rows.find(r => norm(r.task) === n) || S.ws.rows.find(r => { const m = norm(r.task); return m && m.length >= 4 && n.length >= 4 && (m.includes(n) || n.includes(m)); }); }
 function syncRows(){
-  const order = selectedTasks();
-  order.forEach(t => { if (!findRow(t)) S.ws.rows.push({task:t, mine:0, ai:0, fin:0, chk:'', fixed:false}); });
+  const order = selectedTasks(); const own = (S.txt['p1.own']||'').trim(); const old = S.ws.rows || [];
+  const used = new Set(); const pick = t => { const n = norm(t); const r = old.find(r => !used.has(r) && norm(r.task) === n); if (r) used.add(r); return r; };
+  const rows = order.map(t => { let r = pick(t);
+    if (!r && t === own) { r = old.find(x => x.own && !used.has(x)); if (r) { used.add(r); r.task = t; } }
+    if (!r) r = {task:t, mine:0, ai:0, fin:0, chk:'', fixed:false};
+    r.own = (t === own); return r; });
+  old.forEach(r => { if (used.has(r) || !r.added || rows.includes(r)) return;
+    const twin = rows.find(x => norm(x.task) === norm(r.task));
+    if (twin) { ['mine','ai','fin','chk'].forEach(k => { if (!twin[k] && r[k]) twin[k] = r[k]; }); return; }
+    rows.push(r); });
+  S.ws.rows = rows;
   const rank = r => { const n = norm(r.task); const i = order.findIndex(t => { const m = norm(t); return m === n || m.includes(n) || n.includes(m); }); return i < 0 ? 999 : i; };
   S.ws.rows.sort((a, b) => rank(a) - rank(b));
 }
 function applyPaste1(text){
-  S.ws.raw.p1 = text; const t = parseTable(text);
+  S.ws.raw.p1 = text; syncRows(); const t = parseTable(text);
   const ti = Math.max(0, t.head.findIndex(h => /업무/.test(h)));
   let ci = t.head.findIndex(h => /분류/.test(h));
   let n = 0;
   if (!t.body.length) {  // 표가 아닌 문단형 답변: 내가 고른 업무 이름이 들어간 줄에서 분류를 찾는다
     const lines = String(text).split(/\r?\n/);
     selectedTasks().forEach(task => { const ln = lines.find(l => norm(l).includes(norm(task)) && clsOf(l));
-      if (ln) { let r = findRow(task); if (!r) { r = {task, mine:0, ai:0, fin:0, chk:'', fixed:false}; S.ws.rows.push(r); } r.ai = clsOf(ln); n++; } });
+      if (ln) { let r = findRow(task); if (!r) { r = {task, mine:0, ai:0, fin:0, chk:'', fixed:false, added:true}; S.ws.rows.push(r); } r.ai = clsOf(ln); n++; } });
     save(); return n;
   }
   t.body.forEach(cells => {
     const name = cells[ti] || cells[0]; const c = ci >= 0 ? clsOf(cells[ci]) : clsOf(cells.slice(1).join(' '));
     if (!name || !c) return;
-    let r = findRow(name); if (!r) { r = {task:name, mine:0, ai:0, fin:0, chk:'', fixed:false}; S.ws.rows.push(r); }
+    let r = findRow(name); if (!r) { r = {task:name, mine:0, ai:0, fin:0, chk:'', fixed:false, added:true}; S.ws.rows.push(r); }
     r.ai = c; n++;
   });
   save(); return n;
@@ -593,7 +608,7 @@ function wsTable(host, cols){
   host.innerHTML = h + '</table>';
   host.querySelectorAll('.mk[data-c]').forEach(b => b.addEventListener('click', () => {
     const r = S.ws.rows[+b.dataset.i]; const c = b.dataset.c; let v = b.dataset.c === 'chk' ? b.dataset.v : +b.dataset.v;
-    r[c] = r[c] === v ? (c==='chk' ? '' : 0) : v; save(); renderWS();
+    r[c] = r[c] === v ? (c==='chk' ? '' : 0) : v; if (c === 'fin') { delete r.p2set; delete r.finBak; } save(); renderWS();
   }));
 }
 function renderWS(){
@@ -638,20 +653,38 @@ function bindPaste(){
   const p1 = document.getElementById('paste-p1');
   if (p1) { p1.value = S.ws.raw.p1 || ''; p1.addEventListener('input', () => { const n = applyPaste1(p1.value);
     document.getElementById('pastemsg-p1').innerHTML = n ? '<span class="ok">AI 분류 ' + n + '건을 표에 넣었습니다.</span>' : '<span class="empty">표를 찾지 못했습니다. 답변 아래 복사 아이콘으로 다시 복사해 주세요.</span>';
-    ['p2','p4'].forEach(id => { const st = CFG.steps.find(s => s.id === id); renderFields(st); renderPreview(st); }); renderWS(); }); }
+    ['p2','p4'].forEach(id => { const st = CFG.steps.find(s => s.id === id); renderFields(st); renderPreview(st); }); renderWS(); if (window.panelSync) panelSync('p1', p1.value); }); }
   const p3 = document.getElementById('paste-p3');
   if (p3) { p3.value = S.ws.raw.p3 || ''; p3.addEventListener('input', () => { const n = applyPaste3(p3.value);
     document.getElementById('pastemsg-p3').innerHTML = n ? '<span class="ok">입력 점검 ' + n + '건을 표에 넣었습니다.</span>' : '<span class="empty">표의 \'빼고도 할 수 있는지\' 칸을 찾지 못했습니다. 직접 눌러 표시해도 됩니다.</span>';
-    renderWS(); }); }
+    renderWS(); if (window.panelSync) panelSync('p3', p3.value); }); }
   const p4 = document.getElementById('paste-p4');
   if (p4) { p4.value = S.ws.raw.p4 || ''; p4.addEventListener('input', () => { S.ws.raw.p4 = p4.value; save(); renderRecord();
     document.getElementById('pastemsg-p4').innerHTML = p4.value.trim() ? '<span class="ok">[내 기록]에 저장했습니다.</span>' : ''; }); }
   const add = document.getElementById('ws-add');
-  if (add) add.addEventListener('click', () => { const t = prompt('추가할 업무 이름'); if (t && t.trim()) { S.ws.rows.push({task:t.trim(), mine:0, ai:0, fin:0, chk:''}); save(); renderWS(); } });
+  if (add) add.addEventListener('click', () => { const t = prompt('추가할 업무 이름'); if (t && t.trim()) { S.ws.rows.push({task:t.trim(), mine:0, ai:0, fin:0, chk:'', added:true}); save(); renderWS(); } });
 }
 
 /* 1단계 업무 선택이 바뀌면 표도 갱신 */
-function afterPick(step){ if (step.id === 'p1') renderWS(); }
+const PANEL_MAP = {p1:'a', p2:'a', p3:'b'};
+function panelFollow(){ const pn = document.getElementById('panel'); if (!pn) return; let id = ''; try { id = location.hash.slice(1); } catch (e) {}
+  const t = PANEL_MAP[id]; if (!t) return; const b = pn.querySelector('.ptab button[data-t="' + t + '"]'); if (b && !b.classList.contains('on')) b.click(); }
+function p2Fin(){
+  syncRows(); const task = (S.sel['p2.task']||[])[0], to = (S.sel['p2.to']||[])[0];
+  const k = CFG.steps.find(x => x.id === 'p2').fields.find(f => f.key === 'to').options.findIndex(o => o.v === to) + 1;
+  S.ws.rows.forEach(r => { if (r.p2set && (norm(r.task) !== norm(task||'') || !k)) { r.fin = r.finBak || 0; delete r.p2set; delete r.finBak; } });
+  const r = task && S.ws.rows.find(r => norm(r.task) === norm(task));
+  if (r && k) { if (!r.p2set) { r.finBak = r.fin || 0; r.p2set = true; } r.fin = k; }
+  save();
+}
+function sortTasks(){
+  const opts = CFG.steps[0].fields.find(f => f.key === 'tasks').options; const a = S.sel['p1.tasks']; if (!a || !a.length) return;
+  const b = a.slice().sort((x, y) => opts.findIndex(o => o.v === x) - opts.findIndex(o => o.v === y));
+  if (b.join('|') === a.join('|')) return; S.sel['p1.tasks'] = b; S.edit['p1'] = null; save();
+  CFG.steps.forEach(x => { if (x.id === 'p1' || x.fields.some(f => f.from && f.from.startsWith('p1.'))) renderPreview(x); });
+  CFG.steps.forEach(x => { if (x.id !== 'p1' && x.fields.some(f => f.from && f.from.startsWith('p1.'))) renderFields(x); });
+}
+function afterPick(step){ if (step.id === 'p1') { teamAuto(); sortTasks(); addExamples(); renderWS(); } if (step.id === 'p2') { p2Fin(); renderWS(); } }
 document.addEventListener('input', e => { if (e.target.closest('#fields-p1')) setTimeout(renderWS, 0); });
 
 /* 내 기록: 단계별 프롬프트 + 활동지 + ChatGPT 최종 결과 */
@@ -719,32 +752,65 @@ function panelInit(){
     if (ks.length && n.x === ks.length) say = '모두 ✗입니다. AI가 과하게 경고했을 수 있습니다. 개인정보를 빼고 업무 이름만 넣으면 되는지 다시 물어봅시다.';
     document.getElementById('pr3').innerHTML = '<div class="bars"><div><b>' + n.o + '</b>✓ 빼고도 가능</div><div><b>' + n.m + '</b>△ 일부 가능</div><div><b>' + n.x + '</b>✗ 어려움</div></div><div class="say">🎤 ' + esc(say) + '</div>';
   };
-  pp1.addEventListener('input', () => { applyPaste1(pp1.value); const lp = document.getElementById('paste-p1'); if (lp) lp.value = pp1.value; renderWS(); draw1(); });
-  pp3.addEventListener('input', () => { applyPaste3(pp3.value); const lp = document.getElementById('paste-p3'); if (lp) lp.value = pp3.value; renderWS(); draw3(); });
+  pp1.addEventListener('input', () => { applyPaste1(pp1.value); const lp = document.getElementById('paste-p1'); if (lp) { lp.value = pp1.value; lp.dispatchEvent(new Event('input')); } else { renderWS(); } draw1(); });
+  pp3.addEventListener('input', () => { applyPaste3(pp3.value); const lp = document.getElementById('paste-p3'); if (lp) { lp.value = pp3.value; lp.dispatchEvent(new Event('input')); } else { renderWS(); } draw3(); });
   if (pp1.value) draw1(); if (pp3.value) draw3();
+  window.panelSync = (id, v) => { if (id === 'p1') { pp1.value = v; draw1(); } if (id === 'p3') { pp3.value = v; draw3(); } };
 }
-const PRESETS = [
-  {name:'MD.상품기획', team:'MD·상품기획', tasks:['주간 실적 보고 검토','협력사 미팅 자료 검토','편성안·방송 계획 검토','업계 동향·경쟁사 자료 조사'], own:'신규 입점 상품 품평회 결과 정리', extra:'협력사 대부분이 중소기업과 농어민이다'},
-  {name:'방송기획.제작', team:'방송기획·제작', tasks:['편성안·방송 계획 검토','회의록 정리와 후속 업무 배분','협력사 미팅 자료 검토','교육·행사 일정 조율'], own:'방송 큐시트와 상품 소개 문구 검수', extra:'방송 심의 기준에 맞는 표현인지 꼭 확인해야 한다'},
-  {name:'모바일.공영라방', team:'모바일·공영라방', tasks:['편성안·방송 계획 검토','업계 동향·경쟁사 자료 조사','주간 실적 보고 검토','사내 공지·안내문 작성'], own:'라이브 방송 기획안과 숏폼 아이디어 정리', extra:'제작 인원이 적어 한 사람이 여러 방송을 맡는다'},
-  {name:'고객.CS', team:'고객.CS', tasks:['고객 불만 대응 방향 결정','회의록 정리와 후속 업무 배분','팀원 1:1 면담 준비','사내 공지·안내문 작성'], own:'상담 응대 스크립트 개정', extra:'주말 방송 뒤 문의가 몰린다'},
-  {name:'마케팅.홍보', team:'마케팅·홍보', tasks:['업계 동향·경쟁사 자료 조사','사내 공지·안내문 작성','예산 집행 계획 세우기','경영진 보고 자료 만들기'], own:'보도자료 초안 검토', extra:'공공기관이라 외부에 나가는 문구는 사실 확인이 엄격하다'},
-  {name:'경영지원.기획', team:'경영지원·기획', tasks:['경영진 보고 자료 만들기','예산 집행 계획 세우기','팀원 성과 평가 의견 작성','교육·행사 일정 조율'], own:'공공기관 경영평가 자료 준비', extra:'공공기관이라 공시와 평가 일정에 맞춰야 한다'},
-  {name:'품질.물류', team:'품질·물류', tasks:['협력사 미팅 자료 검토','고객 불만 대응 방향 결정','주간 실적 보고 검토','회의록 정리와 후속 업무 배분'], own:'상품 품질검사 결과 보고', extra:'식품과 농수산물이 많아 안전 기준을 꼭 지켜야 한다'},
-  {name:'그 밖의 팀', team:'그 밖의 팀', tasks:['회의록 정리와 후속 업무 배분','사내 공지·안내문 작성','팀원 1:1 면담 준비','교육·행사 일정 조율'], own:'', extra:''},
-];
-function presetInit(){
-  if (!INSTR) return; const host = document.getElementById('fields-p1'); if (!host) return;
-  const box = document.createElement('div'); box.className = 'tnote';
-  box.innerHTML = '<b>강사 메모</b>시연용 예시 불러오기 (팀, 업무 카드, 직접 쓰는 칸이 한 번에 채워집니다) ';
-  PRESETS.forEach(p => { const b = document.createElement('button'); b.type = 'button'; b.className = 'mini'; b.style.margin = '4px'; b.textContent = p.name;
-    b.addEventListener('click', () => { S.sel['p1.team'] = [p.team]; S.sel['p1.tasks'] = p.tasks.slice(); S.txt['p1.own'] = p.own; S.txt['p1.extra'] = p.extra; S.txt['p1.teamx'] = '';
-      S.edit['p1'] = null; S.ws = {rows:[], raw:{}}; save();
-      CFG.steps.forEach(st => { if (st.template) { renderFields(st); renderPreview(st); } });
-      ['paste-p1','paste-p3','paste-p4','pp1','pp3'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ''; });
-      renderWS(); });
-    box.appendChild(b); });
-  host.parentNode.insertBefore(box, host);
+const TEAMEX = {
+  'MD.상품기획': {tasks:['주간 실적 보고 검토','협력사 미팅 자료 검토','편성안.방송 계획 검토','업계 동향.경쟁사 자료 조사'],
+    own:['신규 입점 상품 품평회 결과 정리','협력사 단가 협상 준비','방송 후 상품별 판매 분석'], extra:['협력사 대부분이 중소기업과 농어민이다','제철 상품은 수확 시기에 따라 물량이 크게 바뀐다','방송 편성은 한정되어 있어 상품 선정 경쟁이 크다']},
+  '모바일상품.모바일운영': {tasks:['주간 실적 보고 검토','업계 동향.경쟁사 자료 조사','사내 공지.안내문 작성','고객 불만 대응 방향 결정'],
+    own:['앱 기획전과 원데이특가 상품 구성','앱 푸시 알림 문구 작성','모바일 전용 상품 성과 분석'], extra:['모바일 전용 상품과 방송 상품을 함께 운영한다','앱 첫 화면 자리는 한정되어 있다','고령 고객도 앱으로 주문한다']},
+  '방송기획.제작.공영라방': {tasks:['편성안.방송 계획 검토','회의록 정리와 후속 업무 배분','협력사 미팅 자료 검토','교육.행사 일정 조율'],
+    own:['방송 큐시트와 상품 소개 문구 검수','공영라방 숏폼 아이디어 정리','현장 라이브 촬영 일정 조율'], extra:['방송 심의 기준에 맞는 표현인지 꼭 확인해야 한다','제작 인원이 적어 한 사람이 여러 방송을 맡는다','생방송은 일정 변경이 어렵다']},
+  'CS.CX': {tasks:['고객 불만 대응 방향 결정','회의록 정리와 후속 업무 배분','팀원 1:1 면담 준비','사내 공지.안내문 작성'],
+    own:['상담 응대 스크립트 개정','자주 묻는 질문 답변 정리','민원 유형별 주간 보고'], extra:['주말 방송 뒤 문의가 몰린다','고령 고객이 많아 통화가 길다','고객정보를 다루는 업무가 대부분이다']},
+  '경영기획.재무.전략': {tasks:['경영진 보고 자료 만들기','예산 집행 계획 세우기','팀원 성과 평가 의견 작성','교육.행사 일정 조율'],
+    own:['공공기관 경영평가 자료 준비','이사회 안건 자료 정리','부서별 예산 요청 검토'], extra:['공공기관이라 공시와 평가 일정에 맞춰야 한다','숫자는 공식 자료와 한 자리도 틀리면 안 된다','여러 부서 자료를 모아 정리한다']},
+  '마케팅.홍보.브랜드': {tasks:['업계 동향.경쟁사 자료 조사','사내 공지.안내문 작성','예산 집행 계획 세우기','경영진 보고 자료 만들기'],
+    own:['보도자료 초안 검토','SNS 홍보 문구 작성','기획전 프로모션 성과 정리'], extra:['공공기관이라 외부에 나가는 문구는 사실 확인이 엄격하다','AI 모델을 홍보에 쓰고 있다','정부 판로 행사와 일정을 맞춰야 한다']},
+  '방송심의': {tasks:['편성안.방송 계획 검토','협력사 미팅 자료 검토','사내 공지.안내문 작성','업계 동향.경쟁사 자료 조사'],
+    own:['방송 전 상품 설명 문구 사전심의','심의 지적 사례 정리','협력사 표현 수정 안내'], extra:['건강식품과 화장품은 효능 표현 기준이 까다롭다','방송 직전에 문구가 바뀌는 일이 많다','AI 모델이 나오면 가상인물 표시를 확인해야 한다']},
+  'IT.AX': {tasks:['업계 동향.경쟁사 자료 조사','경영진 보고 자료 만들기','교육.행사 일정 조율','사내 공지.안내문 작성'],
+    own:['부서별 AI 활용 요청 검토','시스템 장애 보고서 작성','AI 도구 사용 안내문 작성'], extra:['시스템 변경은 보안 검토를 거쳐야 한다','부서마다 AI를 쓰고 싶은 업무가 다르다','개인정보가 들어간 시스템이 많다']},
+  '디자인.영상': {tasks:['편성안.방송 계획 검토','협력사 미팅 자료 검토','회의록 정리와 후속 업무 배분','교육.행사 일정 조율'],
+    own:['방송 그래픽과 숏폼 영상 시안 검토','상세페이지 디자인 수정 요청 정리','영상 제작 일정표 관리'], extra:['방송 일정에 맞춰 짧은 시간에 시안을 여러 번 고친다','협력사가 보내는 이미지 품질이 제각각이다','AI 이미지는 저작권과 표시 기준을 확인해야 한다']},
+  'ESG.정책.대외협력': {tasks:['업계 동향.경쟁사 자료 조사','경영진 보고 자료 만들기','협력사 미팅 자료 검토','교육.행사 일정 조율'],
+    own:['정부 정책 변화와 국회 요구 자료 정리','외부 기관 협약 자료 준비','ESG 경영 실적 정리'], extra:['외부 기관에 내는 자료는 숫자 하나도 공식 자료와 맞아야 한다','정책 발표 시점에 맞춰 급하게 자료를 낸다','여러 부서의 실적을 모아야 한다']},
+  '인사.교육.총무안전': {tasks:['교육.행사 일정 조율','사내 공지.안내문 작성','팀원 1:1 면담 준비','예산 집행 계획 세우기'],
+    own:['사내 교육 만족도 결과 정리','채용 공고 문구 작성','안전 점검 결과 보고'], extra:['인사 정보가 많아 다루는 자료마다 보안 등급이 다르다','교육은 근무 일정과 겹치지 않게 잡아야 한다','현장 촬영이 늘어 안전 관리가 중요하다']},
+  '품질.물류': {tasks:['협력사 미팅 자료 검토','고객 불만 대응 방향 결정','주간 실적 보고 검토','회의록 정리와 후속 업무 배분'],
+    own:['상품 품질검사 결과 보고','반품 원인 분석','협력사 품질 교육 자료 준비'], extra:['식품과 농수산물이 많아 안전 기준을 꼭 지켜야 한다','명절에는 물량과 반품이 몰린다','처음 입점한 소상공인은 품질 기준을 잘 모른다']},
+  '전사.본부 총괄': {tasks:['경영진 보고 자료 만들기','주간 실적 보고 검토','회의록 정리와 후속 업무 배분','팀원 성과 평가 의견 작성'],
+    own:['여러 팀의 실적과 이슈를 한 장으로 정리','본부 회의 안건 정하기','부서 간 업무 조율'], extra:['팀마다 보고 양식과 숫자 기준이 다르다','결정할 일이 여러 팀에 걸쳐 있다','외부 기관과 경영진 보고가 잦다']},
+  '그 밖의 부서': {tasks:['회의록 정리와 후속 업무 배분','사내 공지.안내문 작성','팀원 1:1 면담 준비','교육.행사 일정 조율'],
+    own:['팀 업무 매뉴얼 정리','주간 업무 보고서 작성','다른 부서 요청 자료 준비'], extra:['담당자가 바뀌면 인수인계가 어렵다','다른 부서와 함께 하는 일이 많다','반복되는 서류 작업이 많다']},
+};
+function teamAuto(){
+  const team = (S.sel['p1.team']||[])[0]; const ex = TEAMEX[team]; if (!ex) return;
+  const pex = TEAMEX[S.autoTeam]; if (pex && S.autoTeam !== team) ['own','extra'].forEach(k => { if (pex[k].includes(S.txt['p1.' + k])) S.txt['p1.' + k] = ''; });
+  if (S.autoTeam === team) return;
+  S.autoTeam = team;
+  { S.sel['p1.tasks'] = ex.tasks.slice(); S.autoTasks = ex.tasks.slice(); S.edit['p1'] = null; save();
+    const st = CFG.steps.find(x => x.id === 'p1'); renderFields(st); renderPreview(st);
+    CFG.steps.forEach(x => { if (x !== st && x.fields.some(f => f.from && f.from.startsWith('p1.'))) { renderFields(x); renderPreview(x); } }); }
+}
+function addExamples(){
+  if (!INSTR) return;
+  const st = CFG.steps.find(x => x.id === 'p1'); const host = document.getElementById('fields-p1'); if (!host) return;
+  const team = (S.sel['p1.team']||[])[0]; const ex = TEAMEX[team];
+  ['own','extra'].forEach(k => {
+    const i = st.fields.findIndex(f => f.key === k); const box = host.children[i]; if (!box) return;
+    const inp = box.querySelector('input'); const old = box.querySelector('.exrow'); if (old) old.remove();
+    if (!ex) return; if (inp) inp.placeholder = '예: ' + ex[k][0];
+    const row = document.createElement('div'); row.className = 'exrow'; row.innerHTML = '<span>예시</span>';
+    ex[k].forEach(t => { const b = document.createElement('button'); b.type = 'button'; b.className = 'exchip'; b.textContent = t;
+      b.addEventListener('click', () => { S.txt['p1.' + k] = t; S.edit['p1'] = null; save(); if (inp) inp.value = t; renderPreview(st); renderWS();
+        CFG.steps.forEach(x => { if (x !== st && x.fields.some(f => (f.fromText||[]).includes('p1.' + k))) { renderFields(x); renderPreview(x); } }); });
+      row.appendChild(b); });
+    box.appendChild(row);
+  });
 }
 const P4PRESETS = [
   {name:'회의 3분 안내', form:'팀 회의에서 말할 3분 안내', rules:['AI 결과물에는 [확인 필요] 표시를 지우지 않고 올린다','③ 업무는 AI를 쓰기 전에 나에게 먼저 묻는다'], add:'처음 한 달은 결과물을 나와 같이 본다'},
@@ -762,7 +828,8 @@ function p4PresetInit(){
     box.appendChild(b); });
   host.parentNode.insertBefore(box, host);
 }
-function extraInit(){ presetInit(); p4PresetInit(); bindPaste(); renderWS(); panelInit(); window.addEventListener('hashchange', () => show()); }
+function bindBoxCopy(){ document.querySelectorAll('.box .copy').forEach(b => b.addEventListener('click', e => copyText(b.parentElement.querySelector('pre').innerText, e.currentTarget))); }
+function extraInit(){ sortTasks(); bindBoxCopy(); addExamples(); p4PresetInit(); bindPaste(); renderWS(); panelInit(); panelFollow(); window.addEventListener('hashchange', () => { show(); panelFollow(); }); const _sh = show; show = function(id){ _sh(id); panelFollow(); }; }
 
 init(); extraInit(); show();
 </script>
